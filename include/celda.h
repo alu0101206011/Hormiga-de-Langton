@@ -1,18 +1,19 @@
+/// Clase Celda
+/// Contiene la posición y el color
 
 class Celda {
  private:
-  unsigned i_, j_;
-  unsigned estado_;
+  Posicion posicion_;
+  unsigned color_;
 
  public:
 
   Celda(unsigned, unsigned, unsigned);
 
-  unsigned get_i() const;
-  unsigned get_j() const;
-  unsigned get_estado() const;
+  Posicion get_posicion() const;
+  unsigned get_color() const;
 
-  void set_estado(const unsigned&);
+  void set_color(const unsigned&);
 
   friend std::ostream& operator<<(std::ostream&, const Celda&);
 };

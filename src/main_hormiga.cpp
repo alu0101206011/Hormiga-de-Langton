@@ -12,13 +12,11 @@
 ///
 /// To compile: make
 /// To clean files: make clean
+/// g++ -g -Wall --std=c++17 -o ./bin/hormiga src/mundo.cpp src/celda.cpp src/hormiga.cpp src/main_hormiga.cpp
 
 #include <iostream>
-#include <vector>
 
-#include "celda.h"
-#include "mundo.h"
-#include "hormiga.h"
+//#include "../include/mundo.h"
 
 void Usage(int argc, char *argv[]);
 
@@ -27,11 +25,10 @@ void Usage(int argc, char *argv[]);
 /// @param[in] argv Vector containing (char*) the parameters
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
-
-  Celda hola(0,0,0);
-  Mundo tablero(1,1);
-  std::cout << hola;
-  std::cout << tablero;
+  //Mundo tablero(2,2);
+  //tablero.resize(2);
+  //std::cout << tablero.get_filas() << "-" <<tablero.get_columnas() << "\n";
+  //tablero.inicio();
   return 0;
 }
 

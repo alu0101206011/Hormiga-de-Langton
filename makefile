@@ -1,16 +1,16 @@
 CC = g++
 CFLAGS = -g -Wall --std=c++17
-OBJ = ./obj/main_hormiga.o ./obj/mundo.o ./obj/hormiga.o ./obj/celda.o
-EXEC = hormiga
+OBJ = ./obj/celda.o ./obj/reglas.o ./obj/hormiga.o ./obj/mundo.o ./obj/main_hormiga.o 
+EXEC = ./bin/hormiga
 
 all: $(OBJ)
-	$(CC) $(CFLAGS) -o ./bin/$(EXEC) $^
+	$(CC) $(CFLAGS) -o $(EXEC) $^
 
 ./obj/%.o: ./src/%.cpp 
 	$(CC) -c -o $@ $<
 
 run: clean all
-	./bin/$(EXEC)
+	$(EXEC)
 
 .PHONY: clean
 

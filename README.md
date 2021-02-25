@@ -17,12 +17,9 @@ Esta práctica se realizará en dos sesiones de laboratorio en las siguientes fe
 ### Enunciado
 La hormiga de Langton [[1](https://es.wikipedia.org/wiki/Hormiga_de_Langton)] [[2](https://es.wikipedia.org/wiki/Christopher_Langton)] es un sistema discreto, determinista y muy simple. Esto es, dado un estado inicial en el paso de tiempo 0 se define el estado en el paso de tiempo 1, y así sucesivamente. La versión clásica funciona sobre un «mundo» que es una malla cuadriculada bidimensional. En principio se supone infinita, aunque por razones prácticas, se hacen simulaciones donde el borde superior de la malla se identifica con el inferior, y el borde izquierdo con el derecho.
 
-Cada posición de la malla, denominada «celda», tiene un estado que puede ser Blanco o Negro (también se puede usar 0/1, Verdadero/Falso, Izquierda/Derecha,...).
+Cada posición de la malla, denominada «celda», tiene un estado que puede ser Blanco o Negro (también se puede usar 0/1, Verdadero/Falso, Izquierda/Derecha, ...).
 
-Inicialmente, paso de tiempo 0, se ubica arbitrariamente a la «hormiga» sobre una celda del
-mundo. La hormiga siempre está mirando en una de las cuatro direcciones cardinales (Izquierda,
-Derecha, Arriba, aBajo), y en cada paso de tiempo se mueve una celda de acuerdo con las
-siguientes *reglas*:
+Inicialmente, paso de tiempo 0, se ubica arbitrariamente a la «hormiga» sobre una celda del mundo. La hormiga siempre está mirando en una de las cuatro direcciones cardinales (Izquierda, Derecha, Arriba, Abajo), y en cada paso de tiempo se mueve una celda de acuerdo con las siguientes *reglas*:
 * Si está sobre una celda en estado Blanco entonces cambia la celda a estado Negro, la hormiga gira noventa grados a la izquierda y avanza una celda.
 * Si está sobre una celda en estado Negro entonces cambia la celda a estado Blanco, la hormiga gira noventa grados a la derecha y avanza una celda.
 
