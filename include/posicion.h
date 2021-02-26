@@ -1,14 +1,16 @@
 /// Struct de posiciones
 
-struct Posicion {
-  unsigned x;
-  unsigned y;
-};
+class Posicion {
+ private:
+  int x_;
+  int y_;
+ public:
+  Posicion();
+  Posicion(int x, int y);
+  
+  int get_x(void) const;
+  int get_y(void) const;
 
-enum Direcciones {arriba, derecha, abajo, izquierda};
-
-class Movimiento {
- private:              //      0   1  2   3
-  Posicion* direccion; //  = { -1, 0, 1,  0}
-                       //  = {  0, 1, 0, -1}
+  void set_x(const int&);
+  void set_y(const int&);
 };

@@ -1,21 +1,13 @@
 #include <iostream> 
 #include <cassert>
+#include <stdlib.h>
 
 #include "../include/posicion.h"
+#include "../include/movimiento.h"
 #include "../include/celda.h"
 #include "../include/reglas.h"
 #include "../include/hormiga.h"
 #include "../include/mundo.h"
-
-std::ostream& operator<<(std::ostream& os, const Mundo& kTablero) {
-  for (unsigned i = 0; i < kTablero.get_size().filas_; i++) {
-    for (unsigned j = 0; j < kTablero.get_size().columnas_; j++) {
-      os << kTablero(i,j);
-    }
-    os << "\n";
-  }
-  return os;
-}
 
 // Constructor
 Mundo::Mundo(unsigned m, unsigned n) { 
@@ -30,6 +22,9 @@ Mundo::Mundo(unsigned m, unsigned n) {
       tablero_[i][j] = new Celda(i,j,0);
     }
   }
+  // Vector de 1 hormiga
+  hormiga_ = new Hormiga*[1];
+  hormiga_[0] = new Hormiga(*this, rand());
 }
 
 Mundo::~Mundo() {
@@ -40,6 +35,8 @@ Mundo::~Mundo() {
     delete tablero_[i];  
   }
   delete tablero_; 
+  delete hormiga_[0];
+  delete[] hormiga_;
 }
 
 
@@ -102,4 +99,15 @@ bool Mundo::detectar_borde(const unsigned& i, const unsigned& j) {
   if (i == 0 || j == 0 || i == size_.filas_ || j == size_.columnas_)
     return true;
   return false;
+}
+
+
+std::ostream& operator<<(std::ostream& os, const Mundo& kTablero) {
+  for (unsigned i = 0; i < kTablero.get_size().filas_; i++) {
+    for (unsigned j = 0; j < kTablero.get_size().columnas_; j++) {
+      os << kTablero(i,j);
+    }
+    os << "\n";
+  }
+  return os;
 }

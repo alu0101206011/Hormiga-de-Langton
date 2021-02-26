@@ -16,7 +16,12 @@
 
 #include <iostream>
 
-//#include "../include/mundo.h"
+#include "../include/posicion.h"
+#include "../include/movimiento.h"
+#include "../include/celda.h"
+#include "../include/reglas.h"
+#include "../include/hormiga.h"
+#include "../include/mundo.h"
 
 void Usage(int argc, char *argv[]);
 
@@ -25,9 +30,9 @@ void Usage(int argc, char *argv[]);
 /// @param[in] argv Vector containing (char*) the parameters
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
-  //Mundo tablero(2,2);
+  Mundo tablero(2,2);
   //tablero.resize(2);
-  //std::cout << tablero.get_filas() << "-" <<tablero.get_columnas() << "\n";
+  std::cout << tablero.get_size().filas_ << "-" <<tablero.get_size().columnas_ << "\n";
   //tablero.inicio();
   return 0;
 }

@@ -4,8 +4,8 @@
 #include "../include/celda.h"
 
 Celda::Celda(unsigned i, unsigned j, unsigned color): color_(color) {
-  posicion_.x = i;
-  posicion_.y = j;
+  posicion_.set_x(i);
+  posicion_.set_y(j);
 }
 
 Posicion Celda::get_posicion() const {
