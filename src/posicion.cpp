@@ -19,3 +19,15 @@ void Posicion::set_x(const int& kNewX) {
 void Posicion::set_y(const int& kNewY) {
   y_ = kNewY;
 }
+
+bool Posicion::operator==(const Posicion& kOtherPosition) {
+  return ((x_ == kOtherPosition.get_x()) && 
+           y_ == kOtherPosition.get_y());
+}
+
+Posicion Posicion::operator+(const Posicion& kOtherPosition) {
+  Posicion result;
+  result.set_x(kOtherPosition.get_x() + x_);
+  result.set_y(kOtherPosition.get_y() + y_);
+  return result;
+}

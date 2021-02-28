@@ -4,7 +4,7 @@
 /// Algoritmos y Estructuras de Datos avanzadas
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es>
-/// @date 21 Jan 2021
+/// @date 26 Jan 2021
 /// @brief Programa que simule el comportamiento de la hormiga 
 /// de Langton durante un número indefinido de pasos de tiempo
 ///
@@ -12,9 +12,10 @@
 ///
 /// To compile: make
 /// To clean files: make clean
-/// g++ -g -Wall --std=c++17 -o ./bin/hormiga src/mundo.cpp src/celda.cpp src/hormiga.cpp src/main_hormiga.cpp
+/// g++ -g -Wall --std=c++17 -o ./bin/hormiga src/posicion.cpp src/movimiento.cpp src/celda.cpp src/reglas.cpp src/hormiga.cpp src/mundo.cpp src/main_hormiga.cpp 
 
 #include <iostream>
+#include <time.h>
 
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
@@ -30,10 +31,10 @@ void Usage(int argc, char *argv[]);
 /// @param[in] argv Vector containing (char*) the parameters
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
-  Mundo tablero(2,2);
+  Mundo tablero(time(NULL));
   //tablero.resize(2);
-  std::cout << tablero.get_size().filas_ << "-" <<tablero.get_size().columnas_ << "\n";
-  //tablero.inicio();
+
+  tablero.inicio();
   return 0;
 }
 

@@ -1,4 +1,4 @@
-/// Struct de posiciones
+/// Clase de posiciones
 
 class Posicion {
  private:
@@ -13,4 +13,7 @@ class Posicion {
 
   void set_x(const int&);
   void set_y(const int&);
+
+  bool operator==(const Posicion&);
+  Posicion operator+(const Posicion&);
 };

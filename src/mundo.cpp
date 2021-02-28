@@ -1,6 +1,8 @@
 #include <iostream> 
 #include <cassert>
-#include <stdlib.h>
+#include <cstdlib>
+#include <time.h>
+#include <algorithm>
 
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
@@ -8,6 +10,9 @@
 #include "../include/reglas.h"
 #include "../include/hormiga.h"
 #include "../include/mundo.h"
+
+const unsigned NUM_COLOR = 2;
+const unsigned HORMIGA_SIZE = 1;
 
 // Constructor
 Mundo::Mundo(unsigned m, unsigned n) { 
@@ -23,8 +28,46 @@ Mundo::Mundo(unsigned m, unsigned n) {
     }
   }
   // Vector de 1 hormiga
-  hormiga_ = new Hormiga*[1];
-  hormiga_[0] = new Hormiga(*this, rand());
+  srand(time(NULL));
+  hormiga_ = new Hormiga*[HORMIGA_SIZE];
+  for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
+    hormiga_[i] = new Hormiga(*this, rand());
+  }
+}
+
+Mundo::Mundo() {
+  size_.filas_ = 20;
+  size_.columnas_ = 20;
+  tablero_ = new Celda**[size_.filas_];
+  for (unsigned i = 0; i < size_.filas_; i++) {
+    tablero_[i] = new Celda*[size_.columnas_];
+    for (unsigned j = 0; j < size_.columnas_; j++) {
+      tablero_[i][j] = new Celda(i,j,0);
+    }
+  }
+  hormiga_ = new Hormiga*[HORMIGA_SIZE];
+  for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
+    hormiga_[i] = new Hormiga(*this);
+  }
+}
+
+Mundo::Mundo(int random) {
+  std::srand(random);
+  size_.filas_ = std::rand() % 10 + 2;
+  size_.columnas_ = std::rand() % 10 + 2;
+
+
+  tablero_ = new Celda**[size_.filas_];
+  for (unsigned i = 0; i < size_.filas_; i++) {
+    tablero_[i] = new Celda*[size_.columnas_];
+    for (unsigned j = 0; j < size_.columnas_; j++) {
+      tablero_[i][j] = new Celda(i,j,rand() % NUM_COLOR);
+    }
+  }
+  hormiga_ = new Hormiga*[HORMIGA_SIZE];
+  for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
+    hormiga_[i] = new Hormiga(*this, random);
+  }
 }
 
 Mundo::~Mundo() {
@@ -32,31 +75,27 @@ Mundo::~Mundo() {
     for (unsigned j = 0; j < size_.columnas_; j++) {
       delete tablero_[i][j];
     } 
-    delete tablero_[i];  
+    delete[] tablero_[i]; 
   }
-  delete tablero_; 
-  delete hormiga_[0];
+  delete[] tablero_;
+  for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
+    delete hormiga_[i];
+  }
   delete[] hormiga_;
 }
 
 
-Celda& Mundo::operator()(const unsigned int i, const unsigned int j) const {
-  assert(i < size_.filas_ && j < size_.columnas_);
-  return *tablero_[i][j];
-}
-
-void Mundo::inicio(void) {
-  tablero_[0][0]->set_color(1);
-  //resize(2);
-  std::cout << *this;
-}
-
 Celda*** Mundo::get_tablero(void) const {
   return tablero_;
 }
-
-BoardSize Mundo::get_size() const {
+BoardSize Mundo::get_size(void) const {
   return size_;
+}
+Hormiga** Mundo::get_hormiga(void) const {
+  return hormiga_;
+}
+unsigned Mundo::get_color(const Posicion& kPosicion) const {
+  return tablero_[kPosicion.get_x()][kPosicion.get_y()]->get_color();
 }
 
 void Mundo::set_tablero(Celda*** const& kNuevoTablero) {
@@ -64,48 +103,169 @@ void Mundo::set_tablero(Celda*** const& kNuevoTablero) {
 }
 
 
-void Mundo::resize(const unsigned kNumPorLado) {
-/*   filas_ += kNumPorLado * 2;
-  columnas_ += kNumPorLado * 2;
-  Celda*** aux = new Celda**[filas_];
-  for (unsigned i = kNumPorLado - 1, i_tab = 0; i < filas_, i_tab < filas_ - (kNumPorLado * 2); i++, i_tab++) {
-    aux[i] = new Celda*[columnas_];
-    std::cout << "hola\n";
-    for (unsigned j = kNumPorLado - 1, j_tab = 0; j < columnas_, j_tab < columnas_ - (kNumPorLado * 2); j++, j_tab++) {
-      std::cout << "hola2\n";
-      std::cout << "i = " << i << "\t j = " << j << "\n";
-      std::cout << "i_tab = " << i_tab << "\t j_tab = " << j_tab << "\n";
-      aux[i][j] = tablero_[i_tab][j_tab];
+void Mundo::inicio(void) {
+  Regla regla;
+  //resize(5);
+  for (int i = 0; i < 20 ; i++) {
+    std::cout << *this << "\n";
+    int zona_ampliar = movimiento_peligroso();
+    if (zona_ampliar != -1) {
+      resize(1, zona_ampliar);
     }
+    //system("clear");
+    if (regla.regla1(hormiga_[0])) {
+      continue;
+    } else if (regla.regla2(hormiga_[0])) {
+      continue;
+    } else if (regla.regla3(hormiga_[0])) {
+      continue;
+    }
+    
   }
-  eliminar_espacio(tablero_);
-  tablero_ = aux;
-  eliminar_espacio(aux); */
+  std::cout << *this << "\n";
 }
 
 
-void Mundo::eliminar_espacio(Celda*** const& matriz) {
-  for (unsigned i = 0; i < size_.filas_; i++) {
-/*     for (unsigned j = 0; j < columnas_; j++) {
-      delete tablero_[i][j];
-    }  */
-    delete matriz[i];  
+void Mundo::resize(const unsigned kNumPorLado, const int kZonaAmpliar) {
+  Celda*** aux;
+  unsigned fila_original = size_.filas_;
+  unsigned columna_original = size_.columnas_;
+//  QUE DECIDA QUE ZONA AMPLIAR Y QUE LLAME A ESAS COSAS
+  if (kZonaAmpliar == arriba || kZonaAmpliar == abajo) {
+    ampliar_vertical(kZonaAmpliar, kNumPorLado, aux);
+    if (kZonaAmpliar == arriba) {
+      for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
+        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() + kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
+    } else {
+      for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
+        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() - kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
+    }  
+  } else if (kZonaAmpliar == izquierda || kZonaAmpliar == derecha) {
+    ampliar_horizontal(kZonaAmpliar, kNumPorLado, aux);
+    if (kZonaAmpliar == izquierda) {
+      for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
+        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() + kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
+    } else {
+      for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
+        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() - kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
+    }  
   }
-  delete[] matriz;  
-} 
+  eliminar_espacio(tablero_, fila_original, columna_original);
+  tablero_ = aux;
+  //delete aux;
+}
+
+void Mundo::ampliar_vertical(const unsigned kZonaAmpliar, const unsigned kNumPorLado, Celda***& aux) {
+  size_.filas_ += kNumPorLado;
+  aux = new Celda**[size_.filas_]; 
+  for (unsigned i = 0, i_tab = 0; i < (unsigned)(size_.filas_); i++, i_tab++) {
+    aux[i] = new Celda*[size_.columnas_]; 
+    for (unsigned j = 0, j_tab = 0; j < (unsigned)(size_.columnas_); j++, j_tab++) {
+      if (kZonaAmpliar == abajo) {
+        if (i < size_.filas_ - kNumPorLado) {  // copiarla entera hasta llegar a lo nuevo
+          aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
+        } else {
+          aux[i][j] = new Celda(i,j,0);
+          j_tab--;
+        }
+      } else if (kZonaAmpliar == arriba) {
+        if (i >= kNumPorLado) {  // copiar despues de lo nuevo
+          aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
+        } else {
+          aux[i][j] = new Celda(i,j,0);
+          j_tab = -1;
+          i_tab = -1;
+        }
+      }
+    }
+  }
+}
+
+/*
+  aux nuevo espacio filas(3+5) = 8
+  for (i recorro 3+5)
+    nuevo espacio comumnas(3)
+    for (j recorro 3)
+    if (arriba)
+      if (i < tam_original)
+        aux = tablero;
+      else aux (nuevo)
+    else if (abajo)
+      if (i >= tam_original) 
+        aux = tablero;
+      else aux (nuevo)
+
+*/
+void Mundo::ampliar_horizontal(const unsigned kZonaAmpliar, const unsigned kNumPorLado, Celda***& aux) {
+  size_.columnas_ += kNumPorLado;
+  aux = new Celda**[size_.filas_]; 
+  for (unsigned i = 0, i_tab = 0; i < (unsigned)(size_.filas_); i++) {
+    aux[i] = new Celda*[size_.columnas_]; 
+    for (unsigned j = 0, j_tab = 0; j < (unsigned)(size_.columnas_); j++, j_tab++) {
+      if (kZonaAmpliar == derecha) {
+        if (j < size_.columnas_ - kNumPorLado) {  // copiarla entera hasta llegar a lo nuevo
+          aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
+          if (j_tab == size_.columnas_ - kNumPorLado - 1) i_tab++;
+        } else {
+          aux[i][j] = new Celda(i,j,0);
+          j_tab = -1;
+        }
+      } else if (kZonaAmpliar == izquierda) {
+        if (j >= kNumPorLado) {  // copiar despues de lo nuevo
+          aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
+          if (j_tab == size_.columnas_ - kNumPorLado - 1) i_tab++;
+        } else {
+          aux[i][j] = new Celda(i,j,0);
+          j_tab = -1;
+        }
+      }
+    }
+  }
+}
 
 
-bool Mundo::detectar_borde(const unsigned& i, const unsigned& j) {
-  if (i == 0 || j == 0 || i == size_.filas_ || j == size_.columnas_)
-    return true;
-  return false;
+int Mundo::movimiento_peligroso(void) {
+  Posicion posicion;
+  for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
+    posicion = hormiga_[i]->get_posicion_actual();
+    if (posicion.get_x() == 0 && hormiga_[i]->get_direccion() == arriba) {
+      return arriba;
+    } else if (posicion.get_x() == (int)size_.filas_ && hormiga_[i]->get_direccion() == abajo) {
+      return abajo;
+    } else if (posicion.get_y() == 0 && hormiga_[i]->get_direccion() == izquierda) {
+      return izquierda;
+    } else if (posicion.get_y() == (int)size_.columnas_ && hormiga_[i]->get_direccion() == derecha) {
+      return derecha;
+    }
+  }
+  return -1;
+}
+
+void Mundo::eliminar_espacio(Celda*** some_world, const unsigned& kFilas, const unsigned& kColumnas) {
+  for (unsigned i = 0; i < kFilas; i++) {
+    for (unsigned j = 0; j < kColumnas; j++) {
+      delete some_world[i][j];
+    } 
+    delete[] some_world[i]; 
+  }
+  delete[] some_world; 
 }
 
 
 std::ostream& operator<<(std::ostream& os, const Mundo& kTablero) {
+  Posicion hormiga_posicion;
   for (unsigned i = 0; i < kTablero.get_size().filas_; i++) {
     for (unsigned j = 0; j < kTablero.get_size().columnas_; j++) {
-      os << kTablero(i,j);
+      hormiga_posicion.set_x(i);
+      hormiga_posicion.set_y(j);
+      for (unsigned k = 0; k < HORMIGA_SIZE; k++) {
+        if (hormiga_posicion == kTablero.get_hormiga()[k]->get_posicion_actual()) {
+          os << *(kTablero.get_hormiga()[k]);
+        } else {
+          os << *(kTablero.get_tablero()[i][j]);  
+          //std::cout << kTablero.get_tablero()[i][j]->get_posicion().get_x() << " "  << kTablero.get_tablero()[i][j]->get_posicion().get_y() << "\n";
+        }
+      }
     }
     os << "\n";
   }

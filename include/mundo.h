@@ -9,24 +9,31 @@ class Mundo {
   Hormiga** hormiga_;
 
  public:
-  Mundo(unsigned, unsigned);
+  Mundo(unsigned, unsigned); 
+  Mundo();
+  Mundo(int);
+
   ~Mundo();
 
   void inicio(void);
 
   Celda*** get_tablero(void) const;
-  BoardSize get_size() const;
+  BoardSize get_size(void) const;
+  Hormiga** get_hormiga(void) const;
+  unsigned get_color(const Posicion&) const;
 
   void set_tablero(Celda*** const&);
 
-  void resize(const unsigned);
-
-  Celda& operator()(const unsigned int i, const unsigned int j) const;
+  int movimiento_peligroso(void);
 
   friend std::ostream& operator<<(std::ostream&, const Mundo&);
 
  private:
-  void eliminar_espacio(Celda*** const&); 
-  bool detectar_borde(const unsigned& i, const unsigned& j);
+  void crear_tablero(int random);
+  void resize(const unsigned, const int);
+  void ampliar_vertical(const unsigned, const unsigned, Celda***&);
+  void ampliar_horizontal(const unsigned, const unsigned, Celda***&);
+  void eliminar_espacio(Celda***, const unsigned&, const unsigned&);
+
 
 };

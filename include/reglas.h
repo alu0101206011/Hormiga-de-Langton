@@ -1,5 +1,8 @@
+class Hormiga;
 
 class Regla {
   public:
-    Posicion regla1(int color, Direcciones& direccion);
+    int regla1(Hormiga* hormiga);
+    int regla2(Hormiga* hormiga);
+    int regla3(Hormiga* hormiga);
 };
