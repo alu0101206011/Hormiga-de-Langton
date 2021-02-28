@@ -1,8 +1,8 @@
 #include <iostream> 
 #include <cassert>
 #include <cstdlib>
-#include <time.h>
-#include <algorithm>
+#include <ctime>
+#include <unistd.h>
 
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
@@ -15,7 +15,7 @@ const unsigned NUM_COLOR = 2;
 const unsigned HORMIGA_SIZE = 1;
 
 // Constructor
-Mundo::Mundo(unsigned m, unsigned n) { 
+Mundo::Mundo(unsigned m, unsigned n): random_(false) { 
   assert(m>1 && n>1);
   size_.filas_ = m;
   size_.columnas_ = n;
@@ -35,7 +35,7 @@ Mundo::Mundo(unsigned m, unsigned n) {
   }
 }
 
-Mundo::Mundo() {
+Mundo::Mundo(): random_(false) {
   size_.filas_ = 20;
   size_.columnas_ = 20;
   tablero_ = new Celda**[size_.filas_];
@@ -51,7 +51,7 @@ Mundo::Mundo() {
   }
 }
 
-Mundo::Mundo(int random) {
+Mundo::Mundo(int random): random_(true) {
   std::srand(random);
   size_.filas_ = std::rand() % 10 + 2;
   size_.columnas_ = std::rand() % 10 + 2;
@@ -104,23 +104,13 @@ void Mundo::set_tablero(Celda*** const& kNuevoTablero) {
 
 
 void Mundo::inicio(void) {
-  Regla regla;
-  //resize(5);
-  for (int i = 0; i < 20 ; i++) {
+  for (int i = 0; i < 1000; i++) {
+    system("clear");
     std::cout << *this << "\n";
-    int zona_ampliar = movimiento_peligroso();
-    if (zona_ampliar != -1) {
-      resize(1, zona_ampliar);
+    for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
+      hormiga_[i]->cerebro();
     }
-    //system("clear");
-    if (regla.regla1(hormiga_[0])) {
-      continue;
-    } else if (regla.regla2(hormiga_[0])) {
-      continue;
-    } else if (regla.regla3(hormiga_[0])) {
-      continue;
-    }
-    
+    usleep(100000);
   }
   std::cout << *this << "\n";
 }
@@ -136,19 +126,19 @@ void Mundo::resize(const unsigned kNumPorLado, const int kZonaAmpliar) {
     if (kZonaAmpliar == arriba) {
       for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
         hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() + kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
-    } else {
+  /*   } else {
       for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
         hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() - kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
-    }  
+   */ } 
   } else if (kZonaAmpliar == izquierda || kZonaAmpliar == derecha) {
     ampliar_horizontal(kZonaAmpliar, kNumPorLado, aux);
     if (kZonaAmpliar == izquierda) {
       for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
-        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() + kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
-    } else {
+        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x(), hormiga_[i]->get_posicion_actual().get_y() + kNumPorLado);
+    } /* else {
       for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
-        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() - kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
-    }  
+        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x(), hormiga_[i]->get_posicion_actual().get_y());
+    }   */
   }
   eliminar_espacio(tablero_, fila_original, columna_original);
   tablero_ = aux;
@@ -165,14 +155,14 @@ void Mundo::ampliar_vertical(const unsigned kZonaAmpliar, const unsigned kNumPor
         if (i < size_.filas_ - kNumPorLado) {  // copiarla entera hasta llegar a lo nuevo
           aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
         } else {
-          aux[i][j] = new Celda(i,j,0);
+          aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
           j_tab--;
         }
       } else if (kZonaAmpliar == arriba) {
         if (i >= kNumPorLado) {  // copiar despues de lo nuevo
           aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
         } else {
-          aux[i][j] = new Celda(i,j,0);
+          aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
           j_tab = -1;
           i_tab = -1;
         }
@@ -199,23 +189,23 @@ void Mundo::ampliar_vertical(const unsigned kZonaAmpliar, const unsigned kNumPor
 void Mundo::ampliar_horizontal(const unsigned kZonaAmpliar, const unsigned kNumPorLado, Celda***& aux) {
   size_.columnas_ += kNumPorLado;
   aux = new Celda**[size_.filas_]; 
-  for (unsigned i = 0, i_tab = 0; i < (unsigned)(size_.filas_); i++) {
+  for (unsigned i = 0; i < (unsigned)(size_.filas_); i++) {
     aux[i] = new Celda*[size_.columnas_]; 
     for (unsigned j = 0, j_tab = 0; j < (unsigned)(size_.columnas_); j++, j_tab++) {
       if (kZonaAmpliar == derecha) {
         if (j < size_.columnas_ - kNumPorLado) {  // copiarla entera hasta llegar a lo nuevo
-          aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
-          if (j_tab == size_.columnas_ - kNumPorLado - 1) i_tab++;
+          aux[i][j] = new Celda(i,j, tablero_[i][j_tab]->get_color());
+          //if (j_tab == size_.columnas_ - kNumPorLado - 1) i_tab++;
         } else {
-          aux[i][j] = new Celda(i,j,0);
+          aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
           j_tab = -1;
         }
       } else if (kZonaAmpliar == izquierda) {
         if (j >= kNumPorLado) {  // copiar despues de lo nuevo
-          aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
-          if (j_tab == size_.columnas_ - kNumPorLado - 1) i_tab++;
+          aux[i][j] = new Celda(i,j, tablero_[i][j_tab]->get_color());
+          //if (j_tab == size_.columnas_ - kNumPorLado - 1) i_tab++;
         } else {
-          aux[i][j] = new Celda(i,j,0);
+          aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
           j_tab = -1;
         }
       }
@@ -224,21 +214,24 @@ void Mundo::ampliar_horizontal(const unsigned kZonaAmpliar, const unsigned kNumP
 }
 
 
-int Mundo::movimiento_peligroso(void) {
+void Mundo::movimiento_peligroso(void) {
   Posicion posicion;
+  int flag = -1;
   for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
     posicion = hormiga_[i]->get_posicion_actual();
     if (posicion.get_x() == 0 && hormiga_[i]->get_direccion() == arriba) {
-      return arriba;
-    } else if (posicion.get_x() == (int)size_.filas_ && hormiga_[i]->get_direccion() == abajo) {
-      return abajo;
+      flag = arriba;
+    } else if (posicion.get_x() == (int)size_.filas_ - 1 && hormiga_[i]->get_direccion() == abajo) {
+      flag = abajo;
     } else if (posicion.get_y() == 0 && hormiga_[i]->get_direccion() == izquierda) {
-      return izquierda;
-    } else if (posicion.get_y() == (int)size_.columnas_ && hormiga_[i]->get_direccion() == derecha) {
-      return derecha;
+      flag = izquierda;
+    } else if (posicion.get_y() == (int)size_.columnas_ - 1 && hormiga_[i]->get_direccion() == derecha) {
+      flag = derecha;
     }
   }
-  return -1;
+  if (flag != -1) {
+    resize(1, flag);
+  }
 }
 
 void Mundo::eliminar_espacio(Celda*** some_world, const unsigned& kFilas, const unsigned& kColumnas) {
@@ -263,7 +256,6 @@ std::ostream& operator<<(std::ostream& os, const Mundo& kTablero) {
           os << *(kTablero.get_hormiga()[k]);
         } else {
           os << *(kTablero.get_tablero()[i][j]);  
-          //std::cout << kTablero.get_tablero()[i][j]->get_posicion().get_x() << " "  << kTablero.get_tablero()[i][j]->get_posicion().get_y() << "\n";
         }
       }
     }

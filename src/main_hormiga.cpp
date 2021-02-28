@@ -31,8 +31,7 @@ void Usage(int argc, char *argv[]);
 /// @param[in] argv Vector containing (char*) the parameters
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
-  Mundo tablero(time(NULL));
-  //tablero.resize(2);
+  Mundo tablero(4,4);
 
   tablero.inicio();
   return 0;

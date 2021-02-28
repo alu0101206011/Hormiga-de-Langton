@@ -25,6 +25,11 @@ bool Posicion::operator==(const Posicion& kOtherPosition) {
            y_ == kOtherPosition.get_y());
 }
 
+bool Posicion::operator!=(const Posicion& kOtherPosition) {
+  return ((x_ != kOtherPosition.get_x()) || 
+           y_ != kOtherPosition.get_y());
+}
+
 Posicion Posicion::operator+(const Posicion& kOtherPosition) {
   Posicion result;
   result.set_x(kOtherPosition.get_x() + x_);

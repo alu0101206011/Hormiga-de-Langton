@@ -10,7 +10,7 @@
 #include "../include/mundo.h"
 
 
-Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(arriba), mundo_(&mundo) {
+Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(izquierda), mundo_(&mundo) {
   srand(semilla);
   posicion_actual_.set_x(rand() % mundo_->get_size().filas_);
   posicion_actual_.set_y(rand() % mundo_->get_size().columnas_);
@@ -18,11 +18,11 @@ Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(arriba), mundo_(&mundo) 
 } //En esta semilla del random
 
 Hormiga::Hormiga(Mundo& mundo, Posicion posicion)
-    : direccion_(arriba), posicion_actual_(posicion), mundo_(&mundo) {
+    : direccion_(izquierda), posicion_actual_(posicion), mundo_(&mundo) {
   set_posicion_siguiente();
 }
 
-Hormiga::Hormiga(Mundo& mundo): direccion_(arriba), mundo_(&mundo) {
+Hormiga::Hormiga(Mundo& mundo): direccion_(izquierda), mundo_(&mundo) {
   unsigned x = mundo_->get_size().filas_/2;
   unsigned y = mundo_->get_size().columnas_/2;
   posicion_actual_.set_x(x);
@@ -81,6 +81,17 @@ void Hormiga::actualizar_posiciones(const Posicion& kNewPosicion) {
 void Hormiga::actualizar_posiciones(const unsigned& i, const unsigned& j) {
   set_posicion_actual(i, j);
   set_posicion_siguiente();
+}
+
+void Hormiga::cerebro(void) {
+  Regla regla;
+  /*if (regla.regla1(this)) {
+    return;
+  } else */if (regla.regla2(this)) {
+    return;
+  } else if (regla.regla3(this)) {
+    return;
+  }
 }
 
 std::ostream& operator<<(std::ostream& os, const Hormiga& kHormiga) {

@@ -15,5 +15,6 @@ class Posicion {
   void set_y(const int&);
 
   bool operator==(const Posicion&);
+  bool operator!=(const Posicion&);
   Posicion operator+(const Posicion&);
 };

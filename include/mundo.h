@@ -7,6 +7,7 @@ class Mundo {
   Celda*** tablero_;
   BoardSize size_;
   Hormiga** hormiga_;
+  bool random_;
 
  public:
   Mundo(unsigned, unsigned); 
@@ -24,7 +25,7 @@ class Mundo {
 
   void set_tablero(Celda*** const&);
 
-  int movimiento_peligroso(void);
+  void movimiento_peligroso(void);
 
   friend std::ostream& operator<<(std::ostream&, const Mundo&);
 
