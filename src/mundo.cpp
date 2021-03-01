@@ -32,7 +32,7 @@ Mundo::Mundo(unsigned m, unsigned n): random_(false) {
   hormiga_ = new Hormiga*[HORMIGA_SIZE];
   for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
     hormiga_[i] = new Hormiga(*this, rand());
-  }
+  } 
 }
 
 Mundo::Mundo(): random_(false) {
@@ -104,13 +104,13 @@ void Mundo::set_tablero(Celda*** const& kNuevoTablero) {
 
 
 void Mundo::inicio(void) {
-  for (int i = 0; i < 1000; i++) {
+  for (int i = 0; i < 11500; i++) {
     system("clear");
     std::cout << *this << "\n";
     for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
       hormiga_[i]->cerebro();
     }
-    usleep(100000);
+    usleep(1000);
   }
   std::cout << *this << "\n";
 }
@@ -126,19 +126,13 @@ void Mundo::resize(const unsigned kNumPorLado, const int kZonaAmpliar) {
     if (kZonaAmpliar == arriba) {
       for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
         hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() + kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
-  /*   } else {
-      for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
-        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() - kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
-   */ } 
+   } 
   } else if (kZonaAmpliar == izquierda || kZonaAmpliar == derecha) {
     ampliar_horizontal(kZonaAmpliar, kNumPorLado, aux);
     if (kZonaAmpliar == izquierda) {
       for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
         hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x(), hormiga_[i]->get_posicion_actual().get_y() + kNumPorLado);
-    } /* else {
-      for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
-        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x(), hormiga_[i]->get_posicion_actual().get_y());
-    }   */
+    } 
   }
   eliminar_espacio(tablero_, fila_original, columna_original);
   tablero_ = aux;
@@ -214,20 +208,18 @@ void Mundo::ampliar_horizontal(const unsigned kZonaAmpliar, const unsigned kNumP
 }
 
 
-void Mundo::movimiento_peligroso(void) {
+void Mundo::movimiento_peligroso(Hormiga* hormiga_actual) {
   Posicion posicion;
   int flag = -1;
-  for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
-    posicion = hormiga_[i]->get_posicion_actual();
-    if (posicion.get_x() == 0 && hormiga_[i]->get_direccion() == arriba) {
-      flag = arriba;
-    } else if (posicion.get_x() == (int)size_.filas_ - 1 && hormiga_[i]->get_direccion() == abajo) {
-      flag = abajo;
-    } else if (posicion.get_y() == 0 && hormiga_[i]->get_direccion() == izquierda) {
-      flag = izquierda;
-    } else if (posicion.get_y() == (int)size_.columnas_ - 1 && hormiga_[i]->get_direccion() == derecha) {
-      flag = derecha;
-    }
+  posicion = hormiga_actual->get_posicion_actual();
+  if (posicion.get_x() == 0 && hormiga_actual->get_direccion() == arriba) {
+    flag = arriba;
+  } else if (posicion.get_x() == (int)size_.filas_ - 1 && hormiga_actual->get_direccion() == abajo) {
+    flag = abajo;
+  } else if (posicion.get_y() == 0 && hormiga_actual->get_direccion() == izquierda) {
+    flag = izquierda;
+  } else if (posicion.get_y() == (int)size_.columnas_ - 1 && hormiga_actual->get_direccion() == derecha) {
+    flag = derecha;
   }
   if (flag != -1) {
     resize(1, flag);
@@ -251,11 +243,12 @@ std::ostream& operator<<(std::ostream& os, const Mundo& kTablero) {
     for (unsigned j = 0; j < kTablero.get_size().columnas_; j++) {
       hormiga_posicion.set_x(i);
       hormiga_posicion.set_y(j);
-      for (unsigned k = 0; k < HORMIGA_SIZE; k++) {
+      for (unsigned k = 0; k < HORMIGA_SIZE; k++) { // No dibujes dos veces
         if (hormiga_posicion == kTablero.get_hormiga()[k]->get_posicion_actual()) {
           os << *(kTablero.get_hormiga()[k]);
-        } else {
-          os << *(kTablero.get_tablero()[i][j]);  
+          break;
+        } else if (k == HORMIGA_SIZE - 1) {
+          os << *(kTablero.get_tablero()[i][j]); 
         }
       }
     }

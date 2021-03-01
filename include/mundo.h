@@ -25,7 +25,7 @@ class Mundo {
 
   void set_tablero(Celda*** const&);
 
-  void movimiento_peligroso(void);
+  void movimiento_peligroso(Hormiga*);
 
   friend std::ostream& operator<<(std::ostream&, const Mundo&);
 

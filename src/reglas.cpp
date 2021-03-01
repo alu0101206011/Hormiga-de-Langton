@@ -8,10 +8,6 @@
 #include "../include/mundo.h"
 
 
-// Soy una hormiga. estoy quieta, avanzo hacia donde mire mi dirección, segun mi casilla actualizo mi dirección, cambio color de la casilla.
-
-// miro color celda, actualizo dirección, cambio color celda y avanzo a la direccion
-
 int Regla::regla1(Hormiga* hormiga) {  //
   Posicion posicion_actual, posicion_siguiente;
   posicion_actual = hormiga->get_posicion_actual();
@@ -22,7 +18,7 @@ int Regla::regla1(Hormiga* hormiga) {  //
     } else if (hormiga->get_mundo()->get_color(posicion_siguiente) == 1) {
       hormiga->get_mundo()->get_tablero()[posicion_actual.get_x()][posicion_actual.get_y()]->set_color(0);
     }
-    hormiga->get_mundo()->movimiento_peligroso();
+    hormiga->get_mundo()->movimiento_peligroso(hormiga);
     hormiga->actualizar_posiciones(posicion_siguiente);
     return 1;    
   }
@@ -36,7 +32,7 @@ int Regla::regla2(Hormiga* hormiga) {
   posicion_siguiente = hormiga->get_posicion_siguiente(); 
   if (hormiga->get_mundo()->get_color(posicion_actual) == 0) {
     hormiga->set_direccion(next_move.get_girar_izquierda(hormiga->get_direccion()));
-    hormiga->get_mundo()->movimiento_peligroso();
+    hormiga->get_mundo()->movimiento_peligroso(hormiga);
     if (posicion_actual != hormiga->get_posicion_actual())
       posicion_actual = hormiga->get_posicion_actual();
     hormiga->get_mundo()->get_tablero()[posicion_actual.get_x()][posicion_actual.get_y()]->set_color(1);    
@@ -53,7 +49,9 @@ int Regla::regla3(Hormiga* hormiga) {
   posicion_siguiente = hormiga->get_posicion_siguiente();
   if (hormiga->get_mundo()->get_color(posicion_actual) == 1) {
     hormiga->set_direccion(next_move.get_girar_derecha(hormiga->get_direccion()));
-    hormiga->get_mundo()->movimiento_peligroso();
+    hormiga->get_mundo()->movimiento_peligroso(hormiga);
+    if (posicion_actual != hormiga->get_posicion_actual())
+      posicion_actual = hormiga->get_posicion_actual();
     hormiga->get_mundo()->get_tablero()[posicion_actual.get_x()][posicion_actual.get_y()]->set_color(0);
     hormiga->actualizar_posiciones(*next_move.get_girar_direccion(hormiga->get_direccion()) + hormiga->get_posicion_actual());
     return 1;
