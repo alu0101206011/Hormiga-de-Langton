@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
 

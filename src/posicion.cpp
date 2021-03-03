@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "../include/posicion.h"
 
 Posicion::Posicion(): x_(-1), y_(-1) {}

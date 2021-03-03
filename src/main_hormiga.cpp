@@ -15,7 +15,7 @@
 /// g++ -g -Wall --std=c++17 -o ./bin/hormiga src/posicion.cpp src/movimiento.cpp src/celda.cpp src/reglas.cpp src/hormiga.cpp src/mundo.cpp src/main_hormiga.cpp 
 
 #include <iostream>
-#include <time.h>
+#include <ctime>
 
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
@@ -31,7 +31,7 @@ void Usage(int argc, char *argv[]);
 /// @param[in] argv Vector containing (char*) the parameters
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
-  Mundo tablero(4,4);
+  Mundo tablero(time(NULL));
 
   tablero.inicio();
   return 0;

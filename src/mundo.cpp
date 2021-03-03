@@ -1,7 +1,6 @@
 #include <iostream> 
 #include <cassert>
 #include <cstdlib>
-#include <ctime>
 #include <unistd.h>
 
 #include "../include/posicion.h"
@@ -12,7 +11,7 @@
 #include "../include/mundo.h"
 
 const unsigned NUM_COLOR = 2;
-const unsigned HORMIGA_SIZE = 1;
+const unsigned HORMIGA_SIZE = 7;
 
 // Constructor
 Mundo::Mundo(unsigned m, unsigned n): random_(false) { 
@@ -110,7 +109,7 @@ void Mundo::inicio(void) {
     for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
       hormiga_[i]->cerebro();
     }
-    usleep(1000);
+    usleep(10000);
   }
   std::cout << *this << "\n";
 }
@@ -120,7 +119,6 @@ void Mundo::resize(const unsigned kNumPorLado, const int kZonaAmpliar) {
   Celda*** aux;
   unsigned fila_original = size_.filas_;
   unsigned columna_original = size_.columnas_;
-//  QUE DECIDA QUE ZONA AMPLIAR Y QUE LLAME A ESAS COSAS
   if (kZonaAmpliar == arriba || kZonaAmpliar == abajo) {
     ampliar_vertical(kZonaAmpliar, kNumPorLado, aux);
     if (kZonaAmpliar == arriba) {
@@ -136,7 +134,8 @@ void Mundo::resize(const unsigned kNumPorLado, const int kZonaAmpliar) {
   }
   eliminar_espacio(tablero_, fila_original, columna_original);
   tablero_ = aux;
-  //delete aux;
+  aux = NULL;
+  std::cout << aux[1][1]->get_color() << "\n";
 }
 
 void Mundo::ampliar_vertical(const unsigned kZonaAmpliar, const unsigned kNumPorLado, Celda***& aux) {
@@ -165,21 +164,7 @@ void Mundo::ampliar_vertical(const unsigned kZonaAmpliar, const unsigned kNumPor
   }
 }
 
-/*
-  aux nuevo espacio filas(3+5) = 8
-  for (i recorro 3+5)
-    nuevo espacio comumnas(3)
-    for (j recorro 3)
-    if (arriba)
-      if (i < tam_original)
-        aux = tablero;
-      else aux (nuevo)
-    else if (abajo)
-      if (i >= tam_original) 
-        aux = tablero;
-      else aux (nuevo)
 
-*/
 void Mundo::ampliar_horizontal(const unsigned kZonaAmpliar, const unsigned kNumPorLado, Celda***& aux) {
   size_.columnas_ += kNumPorLado;
   aux = new Celda**[size_.filas_]; 
@@ -189,7 +174,6 @@ void Mundo::ampliar_horizontal(const unsigned kZonaAmpliar, const unsigned kNumP
       if (kZonaAmpliar == derecha) {
         if (j < size_.columnas_ - kNumPorLado) {  // copiarla entera hasta llegar a lo nuevo
           aux[i][j] = new Celda(i,j, tablero_[i][j_tab]->get_color());
-          //if (j_tab == size_.columnas_ - kNumPorLado - 1) i_tab++;
         } else {
           aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
           j_tab = -1;
@@ -197,7 +181,6 @@ void Mundo::ampliar_horizontal(const unsigned kZonaAmpliar, const unsigned kNumP
       } else if (kZonaAmpliar == izquierda) {
         if (j >= kNumPorLado) {  // copiar despues de lo nuevo
           aux[i][j] = new Celda(i,j, tablero_[i][j_tab]->get_color());
-          //if (j_tab == size_.columnas_ - kNumPorLado - 1) i_tab++;
         } else {
           aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
           j_tab = -1;
@@ -222,7 +205,7 @@ void Mundo::movimiento_peligroso(Hormiga* hormiga_actual) {
     flag = derecha;
   }
   if (flag != -1) {
-    resize(1, flag);
+    resize(5, flag);
   }
 }
 

@@ -1,6 +1,5 @@
 #include <iostream> 
 #include <cstdlib>
-#include <time.h>
 
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
