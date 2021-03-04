@@ -136,9 +136,6 @@ void Mundo::resize(const unsigned kNumPorLado, const int kZonaAmpliar) {
   }
   eliminar_espacio(tablero_, fila_original, columna_original);
   tablero_ = aux;
-  **aux = NULL;
-  *aux = NULL;
-  aux = NULL;
 }
 
 
