@@ -11,9 +11,9 @@
 #include "../include/mundo.h"
 
 const unsigned NUM_COLOR = 2;
-const unsigned HORMIGA_SIZE = 7;
+const unsigned HORMIGA_SIZE = 1;
 
-// Constructor
+
 Mundo::Mundo(unsigned m, unsigned n): random_(false) { 
   assert(m>1 && n>1);
   size_.filas_ = m;
@@ -34,6 +34,7 @@ Mundo::Mundo(unsigned m, unsigned n): random_(false) {
   } 
 }
 
+
 Mundo::Mundo(): random_(false) {
   size_.filas_ = 20;
   size_.columnas_ = 20;
@@ -50,11 +51,11 @@ Mundo::Mundo(): random_(false) {
   }
 }
 
+
 Mundo::Mundo(int random): random_(true) {
   std::srand(random);
   size_.filas_ = std::rand() % 10 + 2;
   size_.columnas_ = std::rand() % 10 + 2;
-
 
   tablero_ = new Celda**[size_.filas_];
   for (unsigned i = 0; i < size_.filas_; i++) {
@@ -68,6 +69,7 @@ Mundo::Mundo(int random): random_(true) {
     hormiga_[i] = new Hormiga(*this, random);
   }
 }
+
 
 Mundo::~Mundo() {
   for (unsigned i = 0; i < size_.filas_; i++) {
@@ -134,9 +136,11 @@ void Mundo::resize(const unsigned kNumPorLado, const int kZonaAmpliar) {
   }
   eliminar_espacio(tablero_, fila_original, columna_original);
   tablero_ = aux;
+  **aux = NULL;
+  *aux = NULL;
   aux = NULL;
-  std::cout << aux[1][1]->get_color() << "\n";
 }
+
 
 void Mundo::ampliar_vertical(const unsigned kZonaAmpliar, const unsigned kNumPorLado, Celda***& aux) {
   size_.filas_ += kNumPorLado;
@@ -208,6 +212,7 @@ void Mundo::movimiento_peligroso(Hormiga* hormiga_actual) {
     resize(5, flag);
   }
 }
+
 
 void Mundo::eliminar_espacio(Celda*** some_world, const unsigned& kFilas, const unsigned& kColumnas) {
   for (unsigned i = 0; i < kFilas; i++) {

@@ -8,7 +8,7 @@
 #include "../include/mundo.h"
 
 
-int Regla::regla1(Hormiga* hormiga) {  //
+int Regla::regla1(Hormiga* hormiga) {
   Posicion posicion_actual, posicion_siguiente;
   posicion_actual = hormiga->get_posicion_actual();
   posicion_siguiente = hormiga->get_posicion_siguiente();  
@@ -20,10 +20,11 @@ int Regla::regla1(Hormiga* hormiga) {  //
     }
     hormiga->get_mundo()->movimiento_peligroso(hormiga);
     hormiga->actualizar_posiciones(posicion_siguiente);
-    return 1;    
+    return 1;
   }
   return 0;
 }
+
 
 int Regla::regla2(Hormiga* hormiga) {
   Movimiento next_move;
@@ -41,6 +42,7 @@ int Regla::regla2(Hormiga* hormiga) {
   } 
   return 0;
 }
+
 
 int Regla::regla3(Hormiga* hormiga) {
   Movimiento next_move;
