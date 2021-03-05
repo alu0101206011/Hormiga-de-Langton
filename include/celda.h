@@ -8,7 +8,7 @@ class Celda {
 
  public:
 
-  Celda(unsigned, unsigned, unsigned);
+  Celda(int, int, unsigned);
 
   Posicion get_posicion() const;
   unsigned get_color() const;

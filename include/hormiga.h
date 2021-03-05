@@ -24,14 +24,14 @@ class Hormiga {
 
   void set_direccion(const Direcciones&);
   void set_posicion_actual(const Posicion&);
-  void set_posicion_actual(const unsigned&, const unsigned&);
+  void set_posicion_actual(const int&, const int&);
   void set_posicion_siguiente(const Posicion&);
   void set_posicion_siguiente(void);
   void set_movimiento(const Regla&);
   void set_mundo(Mundo* const&);
 
   void actualizar_posiciones(const Posicion&);
-  void actualizar_posiciones(const unsigned&, const unsigned&);
+  void actualizar_posiciones(const int&, const int&);
 
   void cerebro(void);
 

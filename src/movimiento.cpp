@@ -9,12 +9,20 @@ Movimiento::Movimiento(void) {
   }
   direcciones_[arriba]->set_x(-1);
   direcciones_[arriba]->set_y(0);
+  direcciones_[arriba_derecha]->set_x(-1);
+  direcciones_[arriba_derecha]->set_y(1);
   direcciones_[derecha]->set_x(0);
   direcciones_[derecha]->set_y(1);
+  direcciones_[abajo_derecha]->set_x(1);
+  direcciones_[abajo_derecha]->set_y(1);
   direcciones_[abajo]->set_x(1);
   direcciones_[abajo]->set_y(0);
+  direcciones_[abajo_izquierda]->set_x(1);
+  direcciones_[abajo_izquierda]->set_y(-1);
   direcciones_[izquierda]->set_x(0);
   direcciones_[izquierda]->set_y(-1);
+  direcciones_[arriba_izquierda]->set_x(-1);
+  direcciones_[arriba_izquierda]->set_y(-1);
 }
 
 Movimiento::~Movimiento() {
@@ -28,31 +36,23 @@ Posicion** Movimiento::get_direcciones(void) const {
   return direcciones_;
 }
 
-Posicion* Movimiento::get_girar_direccion(Direcciones direccion) const {
+Posicion* Movimiento::get_next_pos(Direcciones direccion) const {
   return direcciones_[direccion];
 }
 
 Direcciones Movimiento::get_girar_derecha(Direcciones direccion) const {
   if (direccion == arriba) {
-    return derecha;
-  } else if (direccion == derecha) {
-    return abajo;
-  } else if (direccion == abajo) {
-    return izquierda;
+    return arriba_izquierda;
   } else {
-    return arriba;
-  }
+    return (Direcciones)(direccion - 1);
+  } 
 }
 
 Direcciones Movimiento::get_girar_izquierda(const Direcciones direccion) const {
-  if (direccion == arriba) {
-    return izquierda;
-  } else if (direccion == izquierda) {
-    return abajo;
-  } else if (direccion == abajo) {
-    return derecha;
-  } else {
+  if (direccion == arriba_izquierda) {
     return arriba;
+  } else {
+    return (Direcciones)(direccion + 1);
   } 
 }
 

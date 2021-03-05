@@ -1,5 +1,6 @@
 struct BoardSize {
   unsigned filas_, columnas_;
+  int Xmin, Ymin, Xmax, Ymax;
 };
 
 class Mundo {
@@ -30,11 +31,10 @@ class Mundo {
   friend std::ostream& operator<<(std::ostream&, const Mundo&);
 
  private:
-  void crear_tablero(int random);
   void resize(const unsigned, const int);
   void ampliar_vertical(const unsigned, const unsigned, Celda***&);
   void ampliar_horizontal(const unsigned, const unsigned, Celda***&);
-  void eliminar_espacio(Celda***, const unsigned&, const unsigned&);
-
+  void eliminar_espacio(Celda***, const int&, const int&);
+  void set_size(int, int);
 
 };

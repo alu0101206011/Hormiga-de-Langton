@@ -2,7 +2,10 @@
 
 Posicion::Posicion(): x_(-1), y_(-1) {}
 
-Posicion::Posicion(int x, int y): x_(x), y_(y) {}
+Posicion::Posicion(int x, int y):
+  x_(x), 
+  y_(y) 
+  {}
   
 int Posicion::get_x(void) const { 
   return x_; 

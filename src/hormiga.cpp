@@ -11,8 +11,8 @@
 
 Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(izquierda), mundo_(&mundo) {
   srand(semilla);
-  posicion_actual_.set_x(rand() % mundo_->get_size().filas_);
-  posicion_actual_.set_y(rand() % mundo_->get_size().columnas_);
+  posicion_actual_.set_x((rand() % mundo_->get_size().filas_) + mundo_->get_size().Xmin);
+  posicion_actual_.set_y((rand() % mundo_->get_size().columnas_) + mundo_->get_size().Ymin);
   set_posicion_siguiente();
 } //En esta semilla del random
 
@@ -22,11 +22,9 @@ Hormiga::Hormiga(Mundo& mundo, Posicion posicion)
 }
 
 Hormiga::Hormiga(Mundo& mundo): direccion_(izquierda), mundo_(&mundo) {
-  unsigned x = mundo_->get_size().filas_/2;
-  unsigned y = mundo_->get_size().columnas_/2;
-  posicion_actual_.set_x(x);
-  posicion_actual_.set_y(y);
-  mundo_->get_tablero()[x][y]->set_color(1);
+  posicion_actual_.set_x(0);
+  posicion_actual_.set_y(0);
+  //mundo_->get_tablero()[0][0]->set_color(1);
   set_posicion_siguiente();
 }
 
@@ -53,7 +51,7 @@ void Hormiga::set_direccion(const Direcciones& kNewDireccion) {
 void Hormiga::set_posicion_actual(const Posicion& kNewPosicion) {
   posicion_actual_ = kNewPosicion;
 }
-void Hormiga::set_posicion_actual(const unsigned& i, const unsigned& j) {
+void Hormiga::set_posicion_actual(const int& i, const int& j) {
   posicion_actual_.set_x(i);
   posicion_actual_.set_y(j);
 }
@@ -62,7 +60,7 @@ void Hormiga::set_posicion_siguiente(const Posicion& kNewPosicion) {
 }
 void Hormiga::set_posicion_siguiente(void) {
   Movimiento move;
-  posicion_siguiente_ = *move.get_girar_direccion(direccion_);  
+  posicion_siguiente_ = *move.get_next_pos(direccion_);  
   posicion_siguiente_ = get_posicion_actual() + posicion_siguiente_;
 }
 void Hormiga::set_movimiento(const Regla& kNewMovimiento) {
@@ -77,7 +75,7 @@ void Hormiga::actualizar_posiciones(const Posicion& kNewPosicion) {
   set_posicion_actual(kNewPosicion);
   set_posicion_siguiente();
 }
-void Hormiga::actualizar_posiciones(const unsigned& i, const unsigned& j) {
+void Hormiga::actualizar_posiciones(const int& i, const int& j) {
   set_posicion_actual(i, j);
   set_posicion_siguiente();
 }
@@ -95,12 +93,20 @@ void Hormiga::cerebro(void) {
 
 std::ostream& operator<<(std::ostream& os, const Hormiga& kHormiga) {
   if (kHormiga.get_direccion() == arriba) {
-    return os << "^";
+    return os << "⬆️ ";
+  } else if (kHormiga.get_direccion() == arriba_derecha) {
+    return os << "↗ ";
   } else if (kHormiga.get_direccion() == derecha) {
-    return os << ">";
+    return os << "➡️ ";
+  } else if (kHormiga.get_direccion() == abajo_derecha) {
+    return os << "↘ ";
   } else if (kHormiga.get_direccion() == abajo) {
-    return os << "v";
+    return os << "⬇️ ";
+  } else if (kHormiga.get_direccion() == abajo_izquierda) {
+    return os << "↙ ";
   } else if (kHormiga.get_direccion() == izquierda) {
-    return os << "<";
+    return os << "⬅️ ";
+  } else if (kHormiga.get_direccion() == arriba_izquierda) {
+    return os << "↖ ";
   } else return os;
 }
