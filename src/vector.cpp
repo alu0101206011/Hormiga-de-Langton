@@ -3,13 +3,18 @@
 #include "../include/vector.h"
 
 template <class T> 
+Vector<T>::Vector(void): lower_(0), upper_(0) { 
+  a_ = NULL; 
+}
+
+template <class T> 
 Vector<T>::Vector(int m, int n): lower_(m), upper_(n) { 
   a_ = new T[n - m]; 
 }
 
 template <class T> 
 Vector<T>::~Vector() { 
-  delete [] a_;
+  delete[] a_;
 }
 
 template <class T> 

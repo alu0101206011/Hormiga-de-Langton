@@ -3,19 +3,20 @@
 #include <cstdlib>
 #include <unistd.h>
 
-#include "../include/vector.h"
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
 #include "../include/celda.h"
 #include "../include/reglas.h"
 #include "../include/hormiga.h"
+#include "../include/vector.h"
 #include "../include/mundo.h"
+
 
 const unsigned NUM_COLOR = 2;
 const unsigned HORMIGA_SIZE = 1;
 
 
-Mundo::Mundo(unsigned m, unsigned n): random_(false), tablero_(-10,10) { 
+Mundo::Mundo(unsigned m, unsigned n): random_(false) { 
 /*   set_size(m,n);
   tablero_ = new Celda**[size_.filas_];
   for (int i = size_.Xmin; i < size_.Xmax; i++) {
@@ -33,27 +34,26 @@ Mundo::Mundo(unsigned m, unsigned n): random_(false), tablero_(-10,10) {
 }
 
 
-Mundo::Mundo(): random_(false), tablero_(-10,10) {
+Mundo::Mundo(): random_(false) {
   set_size(20,20);
+  tablero_.new_size(-10,10);
   for (int i = size_.Xmin; i < size_.Xmax; i++) {
     tablero_[i].new_size(-10,10);
     for (int j = size_.Ymin; j < size_.Ymax; j++) {
       Celda aux(i,j,0);
-      tablero_[i][j] = aux;
+      //tablero_[i][j] = aux;
     }
     std::cout << "\n";
   }
   std::cout << "\n";
-  //std::cout << tablero_[-9][8]->get_posicion().get_x() << "\n";
   hormiga_ = new Hormiga*[HORMIGA_SIZE];
   for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
     hormiga_[i] = new Hormiga(*this);
   }
-  //std::cout << tablero_[-9][8]->get_posicion().get_x() << "\n";
 }
 
 
-Mundo::Mundo(int random): random_(true), tablero_(-10,10) {
+Mundo::Mundo(int random): random_(true) {
 /*   std::srand(random);
   set_size(std::rand() % 10 + 2, std::rand() % 10 + 2);
   tablero_ = new Celda**[size_.filas_];
@@ -63,6 +63,7 @@ Mundo::Mundo(int random): random_(true), tablero_(-10,10) {
       tablero_[i][j] = new Celda(i,j,rand() % NUM_COLOR);
     }
   } */
+
   hormiga_ = new Hormiga*[HORMIGA_SIZE];
   for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
     hormiga_[i] = new Hormiga(*this, random);

@@ -4,7 +4,8 @@ class Vector {
   T *a_;
 
  public:
-  Vector(int m, int n);
+  Vector(void);
+  Vector(int, int);
 
   ~Vector();
 
