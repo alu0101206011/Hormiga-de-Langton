@@ -1,6 +1,7 @@
 #include <iostream> 
 #include <cstdlib>
 
+#include "../include/vector.h"
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
 #include "../include/reglas.h"

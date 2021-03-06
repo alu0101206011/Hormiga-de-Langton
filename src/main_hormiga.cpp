@@ -17,6 +17,7 @@
 #include <iostream>
 #include <ctime>
 
+#include "../include/vector.h"
 #include "../include/posicion.h"
 #include "../include/movimiento.h"
 #include "../include/celda.h"

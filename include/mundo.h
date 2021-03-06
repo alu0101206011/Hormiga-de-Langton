@@ -3,9 +3,11 @@ struct BoardSize {
   int Xmin, Ymin, Xmax, Ymax;
 };
 
+typedef Vector<Vector<Celda>> MatrizCeldas;
+
 class Mundo {
  private:
-  Celda*** tablero_;
+  MatrizCeldas tablero_;
   BoardSize size_;
   Hormiga** hormiga_;
   bool random_;
@@ -19,12 +21,12 @@ class Mundo {
 
   void inicio(void);
 
-  Celda*** get_tablero(void) const;
+  MatrizCeldas get_tablero(void) const;
   BoardSize get_size(void) const;
   Hormiga** get_hormiga(void) const;
   unsigned get_color(const Posicion&) const;
 
-  void set_tablero(Celda*** const&);
+  void set_tablero(MatrizCeldas const&);
 
   void movimiento_peligroso(Hormiga*);
 
@@ -32,9 +34,9 @@ class Mundo {
 
  private:
   void resize(const unsigned, const int);
-  void ampliar_vertical(const unsigned, const unsigned, Celda***&);
-  void ampliar_horizontal(const unsigned, const unsigned, Celda***&);
-  void eliminar_espacio(Celda***, const int&, const int&);
+  void ampliar_vertical(const unsigned, const unsigned, MatrizCeldas&);
+  void ampliar_horizontal(const unsigned, const unsigned, MatrizCeldas&);
+  void eliminar_espacio(MatrizCeldas, const int&, const int&);
   void set_size(int, int);
 
 };

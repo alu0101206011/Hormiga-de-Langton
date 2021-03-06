@@ -10,7 +10,7 @@ Posicion Celda::get_posicion() const {
   return posicion_;
 }
 
-unsigned Celda::get_color() const{
+unsigned Celda::get_color() const {
   return color_;
 }
 
@@ -24,7 +24,7 @@ std::ostream& operator<<(std::ostream& os, const Celda& kCelda) {
     return os << "X";
   } else if (kCelda.get_color() == 1) {
     return os << "🔳";
-  } else return os;
+  } else return os << "E";
 }
 /*   if (kCelda.get_color() == 0) {
     return os << "⬜";
