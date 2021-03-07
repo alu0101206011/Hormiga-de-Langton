@@ -94,19 +94,19 @@ void Hormiga::cerebro(void) {
 
 std::ostream& operator<<(std::ostream& os, const Hormiga& kHormiga) {
   if (kHormiga.get_direccion() == arriba) {
-    return os << "⬆️ ";
+    return os << "⬆ ";
   } else if (kHormiga.get_direccion() == arriba_derecha) {
     return os << "↗ ";
   } else if (kHormiga.get_direccion() == derecha) {
-    return os << "➡️ ";
+    return os << "➡ ";
   } else if (kHormiga.get_direccion() == abajo_derecha) {
     return os << "↘ ";
   } else if (kHormiga.get_direccion() == abajo) {
-    return os << "⬇️ ";
+    return os << "⬇ ";
   } else if (kHormiga.get_direccion() == abajo_izquierda) {
     return os << "↙ ";
   } else if (kHormiga.get_direccion() == izquierda) {
-    return os << "⬅️ ";
+    return os << "⬅ ";
   } else if (kHormiga.get_direccion() == arriba_izquierda) {
     return os << "↖ ";
   } else return os;

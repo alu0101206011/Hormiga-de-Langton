@@ -24,13 +24,10 @@ void Celda::set_color(const unsigned& kNuevoColor) {
 
 std::ostream& operator<<(std::ostream& os, const Celda& kCelda) {
   if (kCelda.get_color() == 0) {
-    return os << "X";
-  } else if (kCelda.get_color() == 1) {
-    return os << "🔳";
-  } else return os << "E";
-}
-/*   if (kCelda.get_color() == 0) {
     return os << "⬜";
   } else if (kCelda.get_color() == 1) {
     return os << "🔳";
-  } else return os; */
+  } else {
+    return os << "E "; 
+  }
+}

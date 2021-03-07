@@ -6,6 +6,7 @@ class Vector {
  public:
   Vector(void);
   Vector(int, int);
+  Vector(const Vector<T>&);
 
   ~Vector();
 
@@ -17,7 +18,13 @@ class Vector {
 
   void new_size(const int&, const int&);
 
+  Vector<T>& operator=(const Vector<T>& v);
+
   T& operator[](const int&);
   T operator[](const int&) const;
+
+ private:
+  void remove(void);
+  void build(void);
 };
 

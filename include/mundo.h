@@ -27,6 +27,7 @@ class Mundo {
   unsigned get_color(const Posicion&) const;
 
   void set_tablero(MatrizCeldas const&);
+  void set_color(const Posicion&, int);
 
   void movimiento_peligroso(Hormiga*);
 
@@ -38,5 +39,5 @@ class Mundo {
   void ampliar_horizontal(const unsigned, const unsigned, MatrizCeldas&);
   void eliminar_espacio(MatrizCeldas, const int&, const int&);
   void set_size(int, int);
-
+  void world_edge(Posicion);
 };

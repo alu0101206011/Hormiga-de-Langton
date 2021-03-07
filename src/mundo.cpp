@@ -17,14 +17,15 @@ const unsigned HORMIGA_SIZE = 1;
 
 
 Mundo::Mundo(unsigned m, unsigned n): random_(false) { 
-/*   set_size(m,n);
-  tablero_ = new Celda**[size_.filas_];
+  set_size(m,n);
+  tablero_.new_size(size_.Xmin,size_.Xmax);
   for (int i = size_.Xmin; i < size_.Xmax; i++) {
-    tablero_[i] = new Celda*[size_.columnas_];
+    tablero_[i].new_size(size_.Ymin,size_.Ymax);
     for (int j = size_.Ymin; j < size_.Ymax; j++) {
-      tablero_[i][j] = new Celda(i,j,0);
+      Celda aux(i,j,0);
+      tablero_[i][j] = aux;
     }
-  } */
+  }
   // Vector de 1 hormiga
   srand(time(NULL));
   hormiga_ = new Hormiga*[HORMIGA_SIZE];
@@ -35,18 +36,15 @@ Mundo::Mundo(unsigned m, unsigned n): random_(false) {
 
 
 Mundo::Mundo(): random_(false) {
-  set_size(20,20);
-  tablero_.new_size(-10,10);
+  set_size(25,25);
+  tablero_.new_size(size_.Xmin,size_.Xmax);
   for (int i = size_.Xmin; i < size_.Xmax; i++) {
-    tablero_[i].new_size(-10,10);
+    tablero_[i].new_size(size_.Ymin,size_.Ymax);
     for (int j = size_.Ymin; j < size_.Ymax; j++) {
       Celda aux(i,j,0);
       tablero_[i][j] = aux;
-      //std::cout << "i: " << tablero_[i][j].get_posicion().get_x() << " j: " <<  tablero_[i][j].get_posicion().get_y() << "\n";
     }
-    std::cout << "\n";
   }
-  std::cout << "\n";
   hormiga_ = new Hormiga*[HORMIGA_SIZE];
   for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
     hormiga_[i] = new Hormiga(*this);
@@ -55,15 +53,15 @@ Mundo::Mundo(): random_(false) {
 
 
 Mundo::Mundo(int random): random_(true) {
-/*   std::srand(random);
   set_size(std::rand() % 10 + 2, std::rand() % 10 + 2);
-  tablero_ = new Celda**[size_.filas_];
+  tablero_.new_size(size_.Xmin,size_.Xmax);
   for (int i = size_.Xmin; i < size_.Xmax; i++) {
-    tablero_[i] = new Celda*[size_.columnas_];
+    tablero_[i].new_size(size_.Ymin,size_.Ymax);
     for (int j = size_.Ymin; j < size_.Ymax; j++) {
-      tablero_[i][j] = new Celda(i,j,rand() % NUM_COLOR);
+      Celda aux(i,j,rand() % NUM_COLOR);
+      tablero_[i][j] = aux;
     }
-  } */
+  }
 
   hormiga_ = new Hormiga*[HORMIGA_SIZE];
   for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
@@ -100,23 +98,43 @@ void Mundo::set_size(int m, int n) {
   assert(m > 1 && n > 1);
   size_.filas_ = m;
   size_.columnas_ = n;
-  size_.Xmin = 0 - (m / 2 + m % 2);
-  size_.Ymin = 0 - (n / 2 + n % 2);
-  size_.Xmax = m / 2  + m % 2;
-  size_.Ymax = n / 2  + n % 2;  
+  size_.Xmin = 0 - m / 2;
+  size_.Ymin = 0 - n / 2;
+  size_.Xmax = (m / 2) + (m % 2);
+  size_.Ymax = (n / 2) + (n % 2);  
+}
+void Mundo::set_color(const Posicion& kPosicion, int color) {
+  tablero_[kPosicion.get_x()][kPosicion.get_y()].set_color(color);
 }
 
 void Mundo::inicio(void) {
-/*   for (int i = 0; i < 11500; i++) {
+  std::cout << *this << "\n";
+  for (int i = 0; i < 11500; i++) {
     system("clear");
-    std::cout << *this << "\n";
     for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
+      world_edge(hormiga_[i]->get_posicion_actual());
       hormiga_[i]->cerebro();
     }
-    usleep(1000000);
-  } */
-  //std::cout << tablero_[-9][8]->get_posicion().get_x() << "\n";
+    std::cout << *this << "\n";
+    usleep(100000);
+  } 
   std::cout << *this << "\n";
+}
+
+void Mundo::world_edge(Posicion pos) {
+  for (unsigned int i = 0; i < HORMIGA_SIZE; i++) {
+    if (pos == hormiga_[i]->get_posicion_actual()) {
+      if (pos.get_x() > size_.Xmax - 1) {
+        hormiga_[i]->set_posicion_actual(size_.Xmin, pos.get_y());
+      } else if (pos.get_x() < size_.Xmin) {
+        hormiga_[i]->set_posicion_actual(size_.Xmax - 1, pos.get_y());
+      } else if (pos.get_y() > size_.Ymax - 1) {
+        hormiga_[i]->set_posicion_actual(pos.get_x(), size_.Ymin);
+      } else if (pos.get_y() < size_.Ymin) {
+        hormiga_[i]->set_posicion_actual(pos.get_x(), size_.Ymax - 1);
+      }
+    }
+  }
 }
 
 
@@ -230,7 +248,6 @@ void Mundo::eliminar_espacio(MatrizCeldas some_world, const int& kFilas, const i
 
 std::ostream& operator<<(std::ostream& os, const Mundo& kTablero) {
   Posicion hormiga_posicion;
-  int count = 0;
   for (int i = kTablero.get_size().Xmin; i < kTablero.get_size().Xmax; i++) {
     for (int j = kTablero.get_size().Ymin; j < kTablero.get_size().Ymax; j++) {
       hormiga_posicion.set_x(i);
@@ -238,16 +255,12 @@ std::ostream& operator<<(std::ostream& os, const Mundo& kTablero) {
       for (unsigned k = 0; k < HORMIGA_SIZE; k++) { // No dibujes dos veces
         if (hormiga_posicion == kTablero.get_hormiga()[k]->get_posicion_actual()) {
           os << *(kTablero.get_hormiga()[k]);
-          count++;
           break;
         } else if (k == HORMIGA_SIZE - 1) {
           os << kTablero.get_tablero()[i][j]; 
-          count++;
         }
       }
     }
-    std::cout << count << "\n";
-    count = 0;
     os << "\n";
   }
   return os;

@@ -11,7 +11,7 @@
 
 
 int Regla::regla1(Hormiga* hormiga) {
-/*   Posicion posicion_actual, posicion_siguiente;
+  Posicion posicion_actual, posicion_siguiente;
   posicion_actual = hormiga->get_posicion_actual();
   posicion_siguiente = hormiga->get_posicion_siguiente();  
   if (hormiga->get_mundo()->get_color(posicion_actual) == hormiga->get_mundo()->get_color(posicion_siguiente)) {
@@ -23,42 +23,42 @@ int Regla::regla1(Hormiga* hormiga) {
     hormiga->get_mundo()->movimiento_peligroso(hormiga);
     hormiga->actualizar_posiciones(posicion_siguiente);
     return 1;
-  } */
+  } 
   return 0;
 }
 
 
 int Regla::regla2(Hormiga* hormiga) {
-/*   Movimiento next_move;
+  Movimiento next_move;
   Posicion posicion_actual, posicion_siguiente;
   posicion_actual = hormiga->get_posicion_actual();
   posicion_siguiente = hormiga->get_posicion_siguiente(); 
   if (hormiga->get_mundo()->get_color(posicion_actual) == 0) {
     hormiga->set_direccion(next_move.get_girar_izquierda(hormiga->get_direccion()));
-    hormiga->get_mundo()->movimiento_peligroso(hormiga);
+/*     hormiga->get_mundo()->movimiento_peligroso(hormiga);
     if (posicion_actual != hormiga->get_posicion_actual())
-      posicion_actual = hormiga->get_posicion_actual();
-    hormiga->get_mundo()->get_tablero()[posicion_actual.get_x()][posicion_actual.get_y()].set_color(1);    
+      posicion_actual = hormiga->get_posicion_actual(); */
+    hormiga->get_mundo()->set_color(posicion_actual, 1);
     hormiga->actualizar_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + posicion_actual);
     return 1; 
-  }  */
+  } 
   return 0;
 }
 
 
 int Regla::regla3(Hormiga* hormiga) {
-/*   Movimiento next_move;
+  Movimiento next_move;
   Posicion posicion_actual, posicion_siguiente;
   posicion_actual = hormiga->get_posicion_actual();
   posicion_siguiente = hormiga->get_posicion_siguiente();
   if (hormiga->get_mundo()->get_color(posicion_actual) == 1) {
     hormiga->set_direccion(next_move.get_girar_derecha(hormiga->get_direccion()));
-    hormiga->get_mundo()->movimiento_peligroso(hormiga);
+/*     hormiga->get_mundo()->movimiento_peligroso(hormiga);
     if (posicion_actual != hormiga->get_posicion_actual())
-      posicion_actual = hormiga->get_posicion_actual();
-    hormiga->get_mundo()->get_tablero()[posicion_actual.get_x()][posicion_actual.get_y()].set_color(0);
+      posicion_actual = hormiga->get_posicion_actual(); */
+    hormiga->get_mundo()->set_color(posicion_actual, 0);
     hormiga->actualizar_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
     return 1;
-  } */
+  }
   return 0;
 }

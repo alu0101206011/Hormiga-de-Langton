@@ -5,18 +5,46 @@
 #include "../include/vector.h"
 
 template <class T> 
+void Vector<T>::remove(void) {
+  if (a_ != 0)
+    delete[] a_;
+  a_ = 0;
+  upper_ = 0;
+  lower_ = 0;
+}
+
+template <class T> 
+void Vector<T>::build(void) {
+  if (upper_ - lower_ > 0) {
+    a_ = new T[upper_ - lower_];
+  } else if (upper_ - lower_ == 0) {
+    a_ = 0;
+  } 
+}
+
+template <class T> 
 Vector<T>::Vector(void): lower_(0), upper_(0) { 
-  a_ = NULL; 
+  build();
 }
 
 template <class T> 
 Vector<T>::Vector(int m, int n): lower_(m), upper_(n) { 
-  a_ = new T[n - m]; 
+  build();
+}
+
+template <class T> 
+Vector<T>::Vector(const Vector<T>& kNewVector) {
+  lower_ = kNewVector.get_lower();
+  upper_ = kNewVector.get_upper();
+  build();
+  for (int i = lower_; i < upper_; i++) {
+    (*this)[i] = kNewVector[i];
+  }
 }
 
 template <class T> 
 Vector<T>::~Vector() { 
-  delete[] a_;
+  remove();
 }
 
 template <class T> 
@@ -46,12 +74,24 @@ void Vector<T>::new_size(const int& kNewLower, const int& kNewUpper) {
 }
 
 template <class T> 
+Vector<T>& Vector<T>::operator=(const Vector<T>& kNewVector) {
+  remove();
+  lower_ = kNewVector.get_lower();
+  upper_ = kNewVector.get_upper();
+  build();
+  for (int i = lower_; i < upper_; i++) {
+    (*this)[i] = kNewVector[i];
+  }
+  return *this;
+}
+
+template <class T> 
 T& Vector<T>::operator[](const int& i) { 
   if (i < lower_ || i >= upper_) {
     std::cout << "Outside array bounds";
     exit(1);
   } else {
-      std::cout << "i: " << i << " resta: " << i-lower_ << "\n";
+      //std::cout << "i: " << i << " resta: " << i-lower_ << "\n";
       return a_[i-lower_];
   }
 }
