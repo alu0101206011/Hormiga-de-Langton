@@ -18,6 +18,6 @@ class Vector {
   void new_size(const int&, const int&);
 
   T& operator[](const int&);
-  T& operator[](const int&) const;
+  T operator[](const int&) const;
 };
 

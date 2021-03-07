@@ -3,6 +3,9 @@
 #include "../include/posicion.h"
 #include "../include/celda.h"
 
+Celda::Celda(void) : posicion_(0, 0), color_(0) {}
+   
+
 Celda::Celda(int i, int j, unsigned color)
     : posicion_(i,j), color_(color) {}
 

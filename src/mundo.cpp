@@ -41,7 +41,8 @@ Mundo::Mundo(): random_(false) {
     tablero_[i].new_size(-10,10);
     for (int j = size_.Ymin; j < size_.Ymax; j++) {
       Celda aux(i,j,0);
-      //tablero_[i][j] = aux;
+      tablero_[i][j] = aux;
+      //std::cout << "i: " << tablero_[i][j].get_posicion().get_x() << " j: " <<  tablero_[i][j].get_posicion().get_y() << "\n";
     }
     std::cout << "\n";
   }

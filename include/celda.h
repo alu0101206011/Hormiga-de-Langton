@@ -8,6 +8,7 @@ class Celda {
 
  public:
 
+  Celda(void);
   Celda(int, int, unsigned);
 
   Posicion get_posicion() const;

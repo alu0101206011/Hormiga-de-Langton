@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "../include/posicion.h"
+#include "../include/celda.h"
 #include "../include/vector.h"
 
 template <class T> 
@@ -49,12 +51,13 @@ T& Vector<T>::operator[](const int& i) {
     std::cout << "Outside array bounds";
     exit(1);
   } else {
+      std::cout << "i: " << i << " resta: " << i-lower_ << "\n";
       return a_[i-lower_];
   }
 }
 
 template<class T>
-T& Vector<T>::operator[](const int& i) const {
+T Vector<T>::operator[](const int& i) const {
   if (i < lower_ || i >= upper_) {
     std::cout << "Outside array bounds";
     exit(1);
@@ -62,3 +65,6 @@ T& Vector<T>::operator[](const int& i) const {
       return a_[i-lower_];
   }
 }
+
+template class Vector<Celda>;
+template class Vector<Vector<Celda>>;
