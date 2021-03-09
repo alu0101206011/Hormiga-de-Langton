@@ -70,8 +70,9 @@ template <class T>
 void Vector<T>::new_size(const int& kNewLower, const int& kNewUpper) {
   lower_ = kNewLower;
   upper_ = kNewUpper;
-  a_ = new T[upper_ - lower_]; 
+  build();
 }
+
 
 template <class T> 
 Vector<T>& Vector<T>::operator=(const Vector<T>& kNewVector) {
@@ -91,7 +92,6 @@ T& Vector<T>::operator[](const int& i) {
     std::cout << "Outside array bounds";
     exit(1);
   } else {
-      //std::cout << "i: " << i << " resta: " << i-lower_ << "\n";
       return a_[i-lower_];
   }
 }

@@ -10,7 +10,7 @@
 #include "../include/mundo.h"
 
 
-Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(izquierda), mundo_(&mundo) {
+Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(arriba), mundo_(&mundo) {
   srand(semilla);
   posicion_actual_.set_x((rand() % mundo_->get_size().filas_) + mundo_->get_size().Xmin);
   posicion_actual_.set_y((rand() % mundo_->get_size().columnas_) + mundo_->get_size().Ymin);
@@ -18,11 +18,11 @@ Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(izquierda), mundo_(&mund
 } //En esta semilla del random
 
 Hormiga::Hormiga(Mundo& mundo, Posicion posicion)
-    : direccion_(izquierda), posicion_actual_(posicion), mundo_(&mundo) {
+    : direccion_(arriba), posicion_actual_(posicion), mundo_(&mundo) {
   set_posicion_siguiente();
 }
 
-Hormiga::Hormiga(Mundo& mundo): direccion_(izquierda), mundo_(&mundo) {
+Hormiga::Hormiga(Mundo& mundo): direccion_(arriba), mundo_(&mundo) {
   posicion_actual_.set_x(0);
   posicion_actual_.set_y(0);
   //mundo_->get_tablero()[0][0]->set_color(1);

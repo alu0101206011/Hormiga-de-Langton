@@ -14,6 +14,7 @@
 
 const unsigned NUM_COLOR = 2;
 const unsigned HORMIGA_SIZE = 1;
+const unsigned ADD_SIZE = 1;
 
 
 Mundo::Mundo(unsigned m, unsigned n): random_(false) { 
@@ -30,7 +31,7 @@ Mundo::Mundo(unsigned m, unsigned n): random_(false) {
   srand(time(NULL));
   hormiga_ = new Hormiga*[HORMIGA_SIZE];
   for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
-    hormiga_[i] = new Hormiga(*this, rand());
+    hormiga_[i] = new Hormiga(*this);
   } 
 }
 
@@ -101,25 +102,82 @@ void Mundo::set_size(int m, int n) {
   size_.Xmin = 0 - m / 2;
   size_.Ymin = 0 - n / 2;
   size_.Xmax = (m / 2) + (m % 2);
-  size_.Ymax = (n / 2) + (n % 2);  
+  size_.Ymax = (n / 2) + (n % 2);
 }
+
+void Mundo::change_size(Direcciones dir, int add) {
+  switch (dir) {
+  case arriba:
+    size_.filas_ = size_.filas_ + add;
+    size_.Xmin = size_.Xmin - add;
+    ampliar_arriba(add);
+    break;
+  case derecha:
+    size_.columnas_ = size_.columnas_ + add;
+    size_.Ymax = size_.Ymax + add;
+    ampliar_derecha(add);
+    break;
+  case abajo:
+    size_.filas_ = size_.filas_ + add;
+    size_.Xmax = size_.Xmax + add;
+    ampliar_abajo(add);
+    break;
+  case izquierda:
+    size_.columnas_ = size_.columnas_ + add;
+    size_.Ymin = size_.Ymin - add;  
+    ampliar_izquierda(add);
+    break;
+  default:
+    std::cout << "Error: Dirección incorrecta.\n";
+    break;
+  } 
+}
+
+
+void Mundo::change_size_esquinas(Direcciones dir, int add) {
+  switch (dir) {
+  case arriba_derecha:
+    change_size(arriba, add);
+    change_size(derecha, add);
+    break;
+  case arriba_izquierda:
+    change_size(arriba, add);
+    change_size(izquierda, add);
+    break;
+  case abajo_derecha:
+    change_size(abajo, add);
+    change_size(derecha, add);
+    break;
+  case abajo_izquierda:
+    change_size(abajo, add);
+    change_size(izquierda, add);
+    break;
+  default:
+    std::cout << "Error: Dirección incorrecta.\n";
+    break;
+  } 
+}
+
+
 void Mundo::set_color(const Posicion& kPosicion, int color) {
   tablero_[kPosicion.get_x()][kPosicion.get_y()].set_color(color);
 }
+
 
 void Mundo::inicio(void) {
   std::cout << *this << "\n";
   for (int i = 0; i < 11500; i++) {
     system("clear");
     for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
-      world_edge(hormiga_[i]->get_posicion_actual());
+      //world_edge(hormiga_[i]->get_posicion_actual());
       hormiga_[i]->cerebro();
     }
     std::cout << *this << "\n";
-    usleep(100000);
+    usleep(1000000);
   } 
   std::cout << *this << "\n";
 }
+
 
 void Mundo::world_edge(Posicion pos) {
   for (unsigned int i = 0; i < HORMIGA_SIZE; i++) {
@@ -138,111 +196,130 @@ void Mundo::world_edge(Posicion pos) {
 }
 
 
-void Mundo::resize(const unsigned kNumPorLado, const int kZonaAmpliar) {
-/*   MatrizCeldas aux;
-  unsigned fila_original = size_.filas_;
-  unsigned columna_original = size_.columnas_;
-  if (kZonaAmpliar == arriba || kZonaAmpliar == abajo) {
-    ampliar_vertical(kZonaAmpliar, kNumPorLado, aux);
-    if (kZonaAmpliar == arriba) {
-      for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
-        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x() + kNumPorLado, hormiga_[i]->get_posicion_actual().get_y());
-   } 
-  } else if (kZonaAmpliar == izquierda || kZonaAmpliar == derecha) {
-    ampliar_horizontal(kZonaAmpliar, kNumPorLado, aux);
-    if (kZonaAmpliar == izquierda) {
-      for (unsigned i = 0; i < HORMIGA_SIZE; i++) 
-        hormiga_[i]->actualizar_posiciones(hormiga_[i]->get_posicion_actual().get_x(), hormiga_[i]->get_posicion_actual().get_y() + kNumPorLado);
-    } 
+void Mundo::ampliar_izquierda(int add) {
+  MatrizCeldas aux(size_.Xmin, size_.Xmax);
+  int j_tab = size_.Ymin + add;
+
+  for (int i = size_.Xmin; i < size_.Xmax; i++) {
+    aux[i].new_size(size_.Ymin, size_.Ymax);
+    for (int j = size_.Ymin; j < size_.Ymax; j++) {
+      if (j < size_.Ymin + add) { 
+        Celda aux_celda(i, j, rand() % NUM_COLOR * random_);
+        aux[i][j] = aux_celda;
+      } else {
+        Celda aux_celda(i,j, tablero_[i][j_tab].get_color());
+        aux[i][j] = aux_celda;
+        j_tab++;
+      }
+    }
+    j_tab = size_.Ymin + add;
   }
-  eliminar_espacio(tablero_, fila_original, columna_original);
+  tablero_.~Vector();
   tablero_ = aux;
-  **aux = NULL;
-  *aux = NULL;
-  aux = NULL; */
+  aux.~Vector();
 }
 
 
-void Mundo::ampliar_vertical(const unsigned kZonaAmpliar, const unsigned kNumPorLado, MatrizCeldas& aux) {
-/*   size_.filas_ += kNumPorLado;
-  aux = new Celda**[size_.filas_]; 
-  for (unsigned i = 0, i_tab = 0; i < (unsigned)(size_.filas_); i++, i_tab++) {
-    aux[i] = new Celda*[size_.columnas_]; 
-    for (unsigned j = 0, j_tab = 0; j < (unsigned)(size_.columnas_); j++, j_tab++) {
-      if (kZonaAmpliar == abajo) {
-        if (i < size_.filas_ - kNumPorLado) {  // copiarla entera hasta llegar a lo nuevo
-          aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
-        } else {
-          aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
-          j_tab--;
-        }
-      } else if (kZonaAmpliar == arriba) {
-        if (i >= kNumPorLado) {  // copiar despues de lo nuevo
-          aux[i][j] = new Celda(i,j, tablero_[i_tab][j_tab]->get_color());
-        } else {
-          aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
-          j_tab = -1;
-          i_tab = -1;
-        }
+void Mundo::ampliar_arriba(int add) {
+  MatrizCeldas aux(size_.Xmin, size_.Xmax);
+
+  for (int i = size_.Xmin, i_tab = size_.Xmin + add; i < size_.Xmax; i++, i_tab++) {
+    aux[i].new_size(size_.Ymin, size_.Ymax);
+    for (int j = size_.Ymin; j < size_.Ymax; j++) {
+      if (i < size_.Xmin + add) {  
+        Celda aux_celda(i, j, rand() % NUM_COLOR * random_);
+        aux[i][j] = aux_celda;
+        i_tab = size_.Xmin + add - 1;
+      } else {
+        Celda aux_celda(i,j, tablero_[i_tab][j].get_color());
+        aux[i][j] = aux_celda;
       }
     }
-  } */
+  }
+  tablero_.~Vector();
+  tablero_ = aux;
+  aux.~Vector();
 }
 
 
-void Mundo::ampliar_horizontal(const unsigned kZonaAmpliar, const unsigned kNumPorLado, MatrizCeldas& aux) {
- /*  size_.columnas_ += kNumPorLado;
-  aux = new Celda**[size_.filas_]; 
-  for (unsigned i = 0; i < (unsigned)(size_.filas_); i++) {
-    aux[i] = new Celda*[size_.columnas_]; 
-    for (unsigned j = 0, j_tab = 0; j < (unsigned)(size_.columnas_); j++, j_tab++) {
-      if (kZonaAmpliar == derecha) {
-        if (j < size_.columnas_ - kNumPorLado) {  // copiarla entera hasta llegar a lo nuevo
-          aux[i][j] = new Celda(i,j, tablero_[i][j_tab]->get_color());
-        } else {
-          aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
-          j_tab = -1;
-        }
-      } else if (kZonaAmpliar == izquierda) {
-        if (j >= kNumPorLado) {  // copiar despues de lo nuevo
-          aux[i][j] = new Celda(i,j, tablero_[i][j_tab]->get_color());
-        } else {
-          aux[i][j] = new Celda(i,j,rand() % NUM_COLOR * random_);
-          j_tab = -1;
-        }
+void Mundo::ampliar_derecha(int add) {
+  MatrizCeldas aux(size_.Xmin, size_.Xmax);
+  //int i_tab = size_.Ymax + add;
+  for (int i = size_.Xmin; i < size_.Xmax; i++) {
+    aux[i].new_size(size_.Ymin, size_.Ymax);
+    for (int j = size_.Ymin; j < size_.Ymax; j++) {
+      if (size_.Ymax - add <= j) {  // Creo que ese igual no va ahí
+        Celda aux_celda(i, j, rand() % NUM_COLOR * random_);
+        aux[i][j] = aux_celda;
+      } else {
+        Celda aux_celda(i,j, tablero_[i][j].get_color());
+        aux[i][j] = aux_celda;
       }
     }
-  } */
+  }
+  tablero_.~Vector();
+  tablero_ = aux;
+  aux.~Vector();
+}
+
+
+void Mundo::ampliar_abajo(int add) {
+  MatrizCeldas aux(size_.Xmin, size_.Xmax);
+  //int i_tab = size_.Ymax + add;
+  for (int i = size_.Xmin; i < size_.Xmax; i++) {
+    aux[i].new_size(size_.Ymin, size_.Ymax);
+    for (int j = size_.Ymin; j < size_.Ymax; j++) {
+      if (size_.Xmax - add <= i) {  // Creo que ese igual no va ahí
+        Celda aux_celda(i, j, rand() % NUM_COLOR * random_);
+        aux[i][j] = aux_celda;
+      } else {
+        Celda aux_celda(i,j, tablero_[i][j].get_color());
+        aux[i][j] = aux_celda;
+      }
+    }
+  }
+  tablero_.~Vector();
+  tablero_ = aux;
+  aux.~Vector();
 }
 
 
 void Mundo::movimiento_peligroso(Hormiga* hormiga_actual) {
   Posicion posicion;
+  Movimiento move;
   int flag = -1;
   posicion = hormiga_actual->get_posicion_actual();
-  if (posicion.get_x() == size_.Xmin && hormiga_actual->get_direccion() == arriba) {
+  flag = es_una_esquina(posicion);
+  if (flag == hormiga_actual->get_direccion()) {
+    flag = flag;
+  } else if (posicion.get_x() == size_.Xmin && move.hacia_arriba(hormiga_actual->get_direccion())) {
     flag = arriba;
-  } else if (posicion.get_x() == size_.Xmax - 1 && hormiga_actual->get_direccion() == abajo) {
+  } else if (posicion.get_x() == size_.Xmax - 1 && move.hacia_abajo(hormiga_actual->get_direccion())) {
     flag = abajo;
-  } else if (posicion.get_y() == size_.Ymin && hormiga_actual->get_direccion() == izquierda) {
+  } else if (posicion.get_y() == size_.Ymin && move.hacia_izquierda(hormiga_actual->get_direccion())) {
     flag = izquierda;
-  } else if (posicion.get_y() == size_.Ymax - 1 && hormiga_actual->get_direccion() == derecha) {
+  } else if (posicion.get_y() == size_.Ymax - 1 && move.hacia_derecha(hormiga_actual->get_direccion())) {
     flag = derecha;
-  }
-  if (flag != -1) {
-    resize(5, flag);
+  } 
+  if (!(flag % 2)) {
+    change_size((Direcciones)flag, ADD_SIZE);
+  } else if (flag % 2 && flag != -1) {
+    change_size_esquinas((Direcciones)flag, ADD_SIZE);
   }
 }
 
 
-void Mundo::eliminar_espacio(MatrizCeldas some_world, const int& kFilas, const int& kColumnas) {
-/*   for (int i = size_.Xmin; i < kFilas; i++) {
-    for (int j = size_.Ymin; j < kColumnas; j++) {
-      delete some_world[i][j];
-    } 
-    delete[] some_world[i]; 
+Direcciones Mundo::es_una_esquina(Posicion posicion) {
+  if (posicion.get_x() == size_.Xmin && posicion.get_y() == size_.Ymin) {
+    return arriba_izquierda;
+  } else if (posicion.get_x() == size_.Xmin && posicion.get_y() == size_.Ymax - 1) {
+    return arriba_derecha;
+  } else if (posicion.get_x() == size_.Xmax - 1 && posicion.get_y() == size_.Ymin) {
+    return abajo_izquierda;
+  } else if (posicion.get_x() == size_.Xmax - 1 && posicion.get_y() == size_.Ymax - 1) {
+    return abajo_derecha;
   }
-  delete[] some_world;  */
+  return (Direcciones)-1;
 }
 
 

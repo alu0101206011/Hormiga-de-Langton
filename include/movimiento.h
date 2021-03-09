@@ -19,4 +19,9 @@ class Movimiento {
   Direcciones get_girar_izquierda(const Direcciones) const;
 
   void set_direccion(Posicion** const&);
+
+  bool hacia_arriba(const Direcciones&);
+  bool hacia_derecha(const Direcciones&);
+  bool hacia_abajo(const Direcciones&);
+  bool hacia_izquierda(const Direcciones&);
 };

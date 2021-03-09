@@ -34,10 +34,13 @@ class Mundo {
   friend std::ostream& operator<<(std::ostream&, const Mundo&);
 
  private:
-  void resize(const unsigned, const int);
-  void ampliar_vertical(const unsigned, const unsigned, MatrizCeldas&);
-  void ampliar_horizontal(const unsigned, const unsigned, MatrizCeldas&);
-  void eliminar_espacio(MatrizCeldas, const int&, const int&);
   void set_size(int, int);
+  void change_size(Direcciones, int);
+  void change_size_esquinas(Direcciones, int);
+  void ampliar_arriba(int);
+  void ampliar_izquierda(int);
+  void ampliar_derecha(int);
+  void ampliar_abajo(int);
   void world_edge(Posicion);
+  Direcciones es_una_esquina(Posicion);
 };

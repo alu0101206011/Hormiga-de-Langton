@@ -35,9 +35,7 @@ int Regla::regla2(Hormiga* hormiga) {
   posicion_siguiente = hormiga->get_posicion_siguiente(); 
   if (hormiga->get_mundo()->get_color(posicion_actual) == 0) {
     hormiga->set_direccion(next_move.get_girar_izquierda(hormiga->get_direccion()));
-/*     hormiga->get_mundo()->movimiento_peligroso(hormiga);
-    if (posicion_actual != hormiga->get_posicion_actual())
-      posicion_actual = hormiga->get_posicion_actual(); */
+    hormiga->get_mundo()->movimiento_peligroso(hormiga); 
     hormiga->get_mundo()->set_color(posicion_actual, 1);
     hormiga->actualizar_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + posicion_actual);
     return 1; 
@@ -53,9 +51,7 @@ int Regla::regla3(Hormiga* hormiga) {
   posicion_siguiente = hormiga->get_posicion_siguiente();
   if (hormiga->get_mundo()->get_color(posicion_actual) == 1) {
     hormiga->set_direccion(next_move.get_girar_derecha(hormiga->get_direccion()));
-/*     hormiga->get_mundo()->movimiento_peligroso(hormiga);
-    if (posicion_actual != hormiga->get_posicion_actual())
-      posicion_actual = hormiga->get_posicion_actual(); */
+    hormiga->get_mundo()->movimiento_peligroso(hormiga);
     hormiga->get_mundo()->set_color(posicion_actual, 0);
     hormiga->actualizar_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
     return 1;

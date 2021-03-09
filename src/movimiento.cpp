@@ -59,3 +59,27 @@ Direcciones Movimiento::get_girar_izquierda(const Direcciones direccion) const {
 void Movimiento::set_direccion(Posicion** const& kNewDireccion) {
   direcciones_ = kNewDireccion;
 }
+
+bool Movimiento::hacia_arriba(const Direcciones& direccion) {
+  return (direccion == arriba || 
+          direccion == arriba_izquierda || 
+          direccion == arriba_derecha);
+}
+
+bool Movimiento::hacia_derecha(const Direcciones& direccion) {
+  return (direccion == derecha || 
+          direccion == abajo_derecha || 
+          direccion == arriba_derecha);
+}
+
+bool Movimiento::hacia_abajo(const Direcciones& direccion) {
+  return (direccion == abajo || 
+          direccion == abajo_izquierda || 
+          direccion == abajo_derecha);
+}
+
+bool Movimiento::hacia_izquierda(const Direcciones& direccion) {
+  return (direccion == izquierda || 
+          direccion == abajo_izquierda || 
+          direccion == arriba_izquierda);
+}
