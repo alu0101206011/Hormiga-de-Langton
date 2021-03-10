@@ -49,6 +49,14 @@ Mundo* Hormiga::get_mundo(void) const {
 void Hormiga::set_direccion(const Direcciones& kNewDireccion) {
   direccion_ = kNewDireccion;
 }
+void Hormiga::set_posiciones(const Posicion& kNewPosicion) {
+  set_posicion_actual(kNewPosicion);
+  set_posicion_siguiente(kNewPosicion);
+}
+void Hormiga::set_posiciones(const int& kNewX, const int& kNewY) {
+  set_posicion_actual(kNewX, kNewY);
+  set_posicion_siguiente();
+}
 void Hormiga::set_posicion_actual(const Posicion& kNewPosicion) {
   posicion_actual_ = kNewPosicion;
 }
@@ -73,10 +81,12 @@ void Hormiga::set_mundo(Mundo* const& kNewMundo) {
 
 
 void Hormiga::actualizar_posiciones(const Posicion& kNewPosicion) {
+  mundo_->movimiento_peligroso(this);
   set_posicion_actual(kNewPosicion);
   set_posicion_siguiente();
 }
 void Hormiga::actualizar_posiciones(const int& i, const int& j) {
+  mundo_->movimiento_peligroso(this);
   set_posicion_actual(i, j);
   set_posicion_siguiente();
 }
@@ -94,19 +104,19 @@ void Hormiga::cerebro(void) {
 
 std::ostream& operator<<(std::ostream& os, const Hormiga& kHormiga) {
   if (kHormiga.get_direccion() == arriba) {
-    return os << "⬆ ";
+    return os << "↑ ";
   } else if (kHormiga.get_direccion() == arriba_derecha) {
     return os << "↗ ";
   } else if (kHormiga.get_direccion() == derecha) {
-    return os << "➡ ";
+    return os << "⟶ ";
   } else if (kHormiga.get_direccion() == abajo_derecha) {
     return os << "↘ ";
   } else if (kHormiga.get_direccion() == abajo) {
-    return os << "⬇ ";
+    return os << "↓ ";
   } else if (kHormiga.get_direccion() == abajo_izquierda) {
     return os << "↙ ";
   } else if (kHormiga.get_direccion() == izquierda) {
-    return os << "⬅ ";
+    return os << "⟵ ";
   } else if (kHormiga.get_direccion() == arriba_izquierda) {
     return os << "↖ ";
   } else return os;
