@@ -21,7 +21,6 @@ Mundo::Mundo(unsigned m, unsigned n): random_(false) {
       tablero_[i][j] = aux;
     }
   }
-  srand(time(NULL));
 }
 
 
@@ -83,21 +82,25 @@ void Mundo::change_size(Direcciones dir, int add) {
     size_.filas_ = size_.filas_ + add;
     size_.Xmin = size_.Xmin - add;
     ampliar_arriba(add);
+    decrementar_abajo(-add);
     break;
   case derecha:
     size_.columnas_ = size_.columnas_ + add;
     size_.Ymax = size_.Ymax + add;
     ampliar_derecha(add);
+    decrementar_izquierda(-add);
     break;
   case abajo:
     size_.filas_ = size_.filas_ + add;
     size_.Xmax = size_.Xmax + add;
     ampliar_abajo(add);
+    decrementar_arriba(-add);
     break;
   case izquierda:
     size_.columnas_ = size_.columnas_ + add;
     size_.Ymin = size_.Ymin - add;  
     ampliar_izquierda(add);
+    decrementar_derecha(-add);
     break;
   default:
     std::cout << "Error: Dirección incorrecta.\n";
@@ -140,13 +143,13 @@ void Mundo::world_edge(Posicion pos, Hormiga** hormiga) {
   for (unsigned int i = 0; i < HORMIGA_SIZE; i++) {
     if (pos == hormiga[i]->get_posicion_actual()) {
       if (pos.get_x() > size_.Xmax - 1) {
-        hormiga[i]->set_posicion_actual(size_.Xmin, pos.get_y());
+        hormiga[i]->set_posiciones(size_.Xmin, pos.get_y());
       } else if (pos.get_x() < size_.Xmin) {
-        hormiga[i]->set_posicion_actual(size_.Xmax - 1, pos.get_y());
+        hormiga[i]->set_posiciones(size_.Xmax - 1, pos.get_y());
       } else if (pos.get_y() > size_.Ymax - 1) {
-        hormiga[i]->set_posicion_actual(pos.get_x(), size_.Ymin);
+        hormiga[i]->set_posiciones(pos.get_x(), size_.Ymin);
       } else if (pos.get_y() < size_.Ymin) {
-        hormiga[i]->set_posicion_actual(pos.get_x(), size_.Ymax - 1);
+        hormiga[i]->set_posiciones(pos.get_x(), size_.Ymax - 1);
       }
     }
   }
@@ -160,7 +163,7 @@ void Mundo::ampliar_izquierda(int add) {
   for (int i = size_.Xmin; i < size_.Xmax; i++) {
     aux[i].new_size(size_.Ymin, size_.Ymax);
     for (int j = size_.Ymin; j < size_.Ymax; j++) {
-      if (j < size_.Ymin + add) { 
+      if (j < size_.Ymin + add) {
         Celda aux_celda(i, j, rand() % NUM_COLOR * random_);
         aux[i][j] = aux_celda;
       } else {
@@ -231,6 +234,74 @@ void Mundo::ampliar_abajo(int add) {
         Celda aux_celda(i,j, tablero_[i][j].get_color());
         aux[i][j] = aux_celda;
       }
+    }
+  }
+  tablero_.~Vector();
+  tablero_ = aux;
+  aux.~Vector();
+}
+
+
+void Mundo::decrementar_izquierda(int add) {
+  size_.columnas_ = size_.columnas_ + add;
+  size_.Ymin = size_.Ymin - add; 
+  MatrizCeldas aux(size_.Xmin, size_.Xmax);
+  for (int i = size_.Xmin; i < size_.Xmax; i++) {
+    aux[i].new_size(size_.Ymin, size_.Ymax);
+    for (int j = size_.Ymin; j < size_.Ymax; j++) {
+      Celda aux_celda(i,j, tablero_[i][j].get_color());
+      aux[i][j] = aux_celda;
+    }
+  }
+  tablero_.~Vector();
+  tablero_ = aux;
+  aux.~Vector();
+}
+
+
+void Mundo::decrementar_arriba(int add) {
+  size_.filas_ = size_.filas_ + add;
+  size_.Xmin = size_.Xmin - add;
+  MatrizCeldas aux(size_.Xmin, size_.Xmax);
+  for (int i = size_.Xmin; i < size_.Xmax; i++) {
+    aux[i].new_size(size_.Ymin, size_.Ymax);
+    for (int j = size_.Ymin; j < size_.Ymax; j++) {
+      Celda aux_celda(i,j, tablero_[i][j].get_color());
+      aux[i][j] = aux_celda;
+    }
+  }
+  tablero_.~Vector();
+  tablero_ = aux;
+  aux.~Vector();
+}
+
+
+void Mundo::decrementar_derecha(int add) {
+  size_.columnas_ = size_.columnas_ + add;
+  size_.Ymax = size_.Ymax + add;
+  MatrizCeldas aux(size_.Xmin, size_.Xmax);
+  for (int i = size_.Xmin; i < size_.Xmax; i++) {
+    aux[i].new_size(size_.Ymin, size_.Ymax);
+    for (int j = size_.Ymin; j < size_.Ymax; j++) {
+      Celda aux_celda(i,j, tablero_[i][j].get_color());
+      aux[i][j] = aux_celda;
+    }
+  }
+  tablero_.~Vector();
+  tablero_ = aux;
+  aux.~Vector();
+}
+
+
+void Mundo::decrementar_abajo(int add) {
+  size_.filas_ = size_.filas_ + add;
+  size_.Xmax = size_.Xmax + add;
+  MatrizCeldas aux(size_.Xmin, size_.Xmax);
+  for (int i = size_.Xmin; i < size_.Xmax; i++) {
+    aux[i].new_size(size_.Ymin, size_.Ymax);
+    for (int j = size_.Ymin; j < size_.Ymax; j++) {
+      Celda aux_celda(i,j, tablero_[i][j].get_color());
+      aux[i][j] = aux_celda;
     }
   }
   tablero_.~Vector();

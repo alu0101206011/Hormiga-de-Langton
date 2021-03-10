@@ -12,7 +12,7 @@
 ///
 /// To compile: make
 /// To clean files: make clean
-/// g++ -g -Wall --std=c++17 -o ./bin/hormiga src/vector.cpp src/posicion.cpp src/movimiento.cpp src/celda.cpp src/reglas.cpp src/hormiga.cpp src/mundo.cpp src/main_hormiga.cpp 
+/// g++ -g -Wall --std=c++17 -o ./bin/hormiga src/vector.cpp src/posicion.cpp src/movimiento.cpp src/celda.cpp src/reglas.cpp src/hormiga.cpp src/mundo.cpp src/universo.cpp src/main_hormiga.cpp
 
 #include <iostream>
 #include <ctime>

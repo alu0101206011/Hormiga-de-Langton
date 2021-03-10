@@ -42,5 +42,9 @@ class Mundo {
   void ampliar_izquierda(int);
   void ampliar_derecha(int);
   void ampliar_abajo(int);
+  void decrementar_arriba(int);
+  void decrementar_izquierda(int);
+  void decrementar_derecha(int);
+  void decrementar_abajo(int);
   Direcciones es_una_esquina(Posicion);
 };

@@ -77,7 +77,7 @@ void Universo::start_simulation(int iter) {
     }
     std::cout << *this << "\n";
     usleep(1000000);
-  } 
+  }
   std::cout << *this << "\n";
 }
 
