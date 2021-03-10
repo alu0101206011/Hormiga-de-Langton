@@ -11,7 +11,7 @@ class Hormiga {
 
  public:
   Hormiga(Mundo& mundo, int semilla); //En esta semilla del random
-  Hormiga(Mundo& mundo, Posicion posicion);
+  Hormiga(Mundo& mundo, int i, int j);
   Hormiga(Mundo& mundo);
 
   //~Hormiga();

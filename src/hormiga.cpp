@@ -17,9 +17,9 @@ Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(arriba), mundo_(&mundo) 
   set_posicion_siguiente();
 } //En esta semilla del random
 
-Hormiga::Hormiga(Mundo& mundo, Posicion posicion)
-    : direccion_(arriba), posicion_actual_(posicion), mundo_(&mundo) {
-  set_posicion_siguiente();
+Hormiga::Hormiga(Mundo& mundo, int i, int j)
+    : direccion_(arriba), mundo_(&mundo) {
+  actualizar_posiciones(i, j);
 }
 
 Hormiga::Hormiga(Mundo& mundo): direccion_(arriba), mundo_(&mundo) {

@@ -1,3 +1,7 @@
+const unsigned NUM_COLOR = 2;
+const unsigned HORMIGA_SIZE = 1;
+const unsigned ADD_SIZE = 1;
+
 struct BoardSize {
   unsigned filas_, columnas_;
   int Xmin, Ymin, Xmax, Ymax;
@@ -19,8 +23,6 @@ class Mundo {
 
   ~Mundo();
 
-  void inicio(void);
-
   MatrizCeldas get_tablero(void) const;
   BoardSize get_size(void) const;
   Hormiga** get_hormiga(void) const;
@@ -30,8 +32,7 @@ class Mundo {
   void set_color(const Posicion&, int);
 
   void movimiento_peligroso(Hormiga*);
-
-  friend std::ostream& operator<<(std::ostream&, const Mundo&);
+  void world_edge(Posicion, Hormiga**);
 
  private:
   void set_size(int, int);
@@ -41,6 +42,5 @@ class Mundo {
   void ampliar_izquierda(int);
   void ampliar_derecha(int);
   void ampliar_abajo(int);
-  void world_edge(Posicion);
   Direcciones es_una_esquina(Posicion);
 };

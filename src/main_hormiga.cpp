@@ -24,22 +24,19 @@
 #include "../include/reglas.h"
 #include "../include/hormiga.h"
 #include "../include/mundo.h"
+#include "../include/universo.h"
 
 void Usage(int argc, char *argv[]);
 
-/// Main function
-/// @param[in] argc Number of command line parameters
-/// @param[in] argv Vector containing (char*) the parameters
+
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
-  Mundo tablero(3,3);
-  tablero.inicio();
+  Universo universe;
+  universe.start_simulation(40);
   return 0;
 }
 
-/// @brief Funtion that show the usage of this program
-/// @param[in] argc Number of command line parameters
-/// @param[in] argv Vector containing (char*) the parameters
+
 void Usage(int argc, char *argv[]) {
   if (argc == 2)
     if((std::string)argv[1] == "-h" || (std::string)argv[1] == "--help") {
