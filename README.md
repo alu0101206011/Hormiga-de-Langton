@@ -3,29 +3,28 @@ Algoritmos y Estructuras de Datos Avanzadas.
 
 Curso 2020-2021.
 
-## Práctica 2: Hormiga de Langton Modificada
+## Práctica 3: Mundo Hormigas
 ### Objetivo 
-El objetivo de esta práctica es implementar tipos de datos definidos por el usuario y utilizarlos en un programa en lenguaje C++.
+El objetivo de esta práctica es utilizar el polimorfismo dinámico en tipos de datos definidos por el usuario en un programa en lenguaje C++
 
 
 ### Entrega
-Esta práctica se entregará en la sesión de laboratorio realizada entre las fechas del 8 al 12 de marzo. Durante esta sesión se podrán solicitar modificaciones sobre la práctica. En el actual escenario de presencialidad adaptada, la entrega se realizará en tareas separadas para la  rotación con asistencia presencial y la rotación con asistencia online.
+Esta práctica se entregará en la sesión de laboratorio realizada entre las fechas del 15 al 19 de marzo. Durante esta sesión se podrán solicitar modificaciones sobre la práctica. En el actual escenario de presencialidad adaptada, la entrega se realizará en tareas separadas para la rotación con asistencia presencial y la rotación con asistencia online.
 
 
 ### Enunciado
-A partir de la implementación de la hormiga de Langton [[1](https://es.wikipedia.org/wiki/Hormiga_de_Langton)], realizada en la práctica 1, en esta práctica se pide realizar las siguientes modificaciones:
-
-* 1. En el objeto Mundo se quiere emular una malla bidimensional infinita. Para ello, cuando la hormiga alcance una celda más allá de las dimensiones actuales de la malla se procederá a redimensionar la malla, aumentando el tamaño de la misma en una cantidad fija. Sólo se incrementará el tamaño por el borde de la malla donde se haya rebasado.
-Hay que tener en cuenta que el incremento de la malla también puede realizarse  hacia posiciones con índices negativos. Para manejar esta situación se implementará un tipo genérico, Vector<T>, que admitirá la indexación en un rango de posiciones negativas. Por ejemplo, Vector<T> v(-10,10), instancia un array de 20 elementos indexados entre -10 y +9.
-Por tanto, la malla del mundo infinito se extiende en un rango de posiciones
-(-Xmin,-Ymin)hasta (Xmax,Ymax), que podrán aumentar según vayan siendo alcanzadas por la hormiga al moverse. Inicialmente, la malla se extenderá entre las posiciones (-Xini,-Yini) hasta (Xini,Yini), y la hormiga estará ubicada en la posición (0,0).
+A partir de la implementación de la **hormiga de Langton modificada**, realizada en la práctica 2, en esta práctica se pide realizar las siguientes modificaciones:
 
 
-* 2. En el objeto Hormiga se quiere aumentar las direcciones hacia las que puede mirar, de forma que se incluyen las direcciones en diagonal. Mientras que la hormiga clásica sólo puede mirar en las direcciones: Arriba, aBajo, Izquierda o Derecha; la hormiga modificada también podrá mirar hacia las celdas que puede alcanzar con movimientos en diagonal: arriba-izquierda, arriba-derecha, abajo-izquierda, abajo-derecha. De esta forma, en cada paso de la simulación los giros que realiza la hormiga, según el color de la celda sobre la que se encuentre, serán de 45º en lugar de 90º.
+* 1. En las prácticas anteriores se han implementado dos versiones alternativas del objeto **Mundo**. En la primera práctica la malla bidimensional tiene unas dimensiones constantes, fijadas al inicio de la ejecución y que no varían durante las misma. Cuando una hormiga rebasa alguno de los bordes de la malla, reaparece por el borde opuesto. En la segunda práctica se asume una malla bidimensional infinita. Inicialmente se establecen unas dimensiones, pero estas aumentan cada vez que la hormiga alcanza una posición fuera de la malla actual.
+En esta práctica vamos a implantar un programa que permita al usuario seleccionar la implementación del objeto **Mundo** que quiere utilizar. Para ello, la clase **Mundo** se convierte en una interfaz (clase abstracta) que establece las operaciones que deben implementar las clases que definen los objetos mundos particulares (**MundoFinito**, **MundoInfinito**).
 
 
-* 3. Se incorpora un nuevo objeto al programa, el objeto Universo, que contendrá al objeto mundo y al objeto hormiga. Será responsable de implementar el bucle que controla el paso del tiempo. De esta forma, en el programa principal sólo hay que leer los datos de inicialización, instanciar el objeto universo, que contiene al mundo y a la hormiga; e invocar al método del objeto universo que simula los pasos de tiempo hasta que el usuario decida finalizar.
+* 2. En el objeto **Hormiga** se quiere separar la implementación del código de actualización del movimiento. Para ello se crean métodos privados que calculan por separado el giro y el desplazamiento. Estos métodos privados son llamados desde el método público que actualiza el movimiento en cada paso de la simulación
+Se incrementa el número de hormigas que coexisten en el mundo. Inicialmente se crean en posiciones del mundo, y direcciones, dadas por el usuario. Las hormigas se almacenan en una lista ordenada por la posición que ocupa, de forma que el orden de las hormigas en la lista coincida con el orden en que se las encontrará el método de visualización de la malla del mundo.
 
 
-### Referencias
-* [Wikipedia: Hormiga de Langton](https://es.wikipedia.org/wiki/Hormiga_de_Langton)
+* 3. El programa principal solicita al usuario que elija el tipo de mundo, así como sus dimensiones, y también el número de hormigas que coexisten en el mundo. Instancia al objeto **Mundo** y la lista de objetos **Hormiga** y los pasa como parámetro al constructor del objeto **Universo** para que realice la simulación.
+
+
+* 4. El constructor del objeto Universo recibe como parámetros un objeto de tipo **Mundo** y una lista de objetos **Hormiga** colocadas sobre la malla del mundo. Controla el paso del tiempo, la actualización de las hormigas y la visualización del mundo hasta que el usuario detenga la simulación.
