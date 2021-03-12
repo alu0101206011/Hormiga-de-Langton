@@ -3,6 +3,8 @@
 #include "../include/posicion.h"
 #include "../include/celda.h"
 
+
+
 Celda::Celda(void) : posicion_(0, 0), color_(0) {}
    
 
@@ -23,9 +25,9 @@ void Celda::set_color(const unsigned& kNuevoColor) {
 
 
 std::ostream& operator<<(std::ostream& os, const Celda& kCelda) {
-  if (kCelda.get_color() == 0) {
+  if (kCelda.get_color() == Blanco) {
     return os << "⬜";
-  } else if (kCelda.get_color() == 1) {
+  } else if (kCelda.get_color() == Negro) {
     return os << "🔳";
   } else {
     return os << "E "; 

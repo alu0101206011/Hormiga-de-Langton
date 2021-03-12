@@ -3,7 +3,7 @@ class Universo {
   Mundo* mundo_;
   Hormiga** hormiga_;
  public:
-  Universo();
+  Universo(Mundo*);
   Universo(unsigned, unsigned);
   Universo(int);
 
@@ -14,10 +14,12 @@ class Universo {
   friend std::ostream& operator<<(std::ostream&, const Universo&);
  
  private:
-  void build_mundo(void);
+  /* void build_mundo(void);
   void build_mundo(int, int);
-  void build_mundo(int);
+  void build_mundo(int); */
   void build_hormiga(void);
   void build_hormiga(int, int);
   void build_hormiga(int);
+
+  void ordenar_lista();
 };

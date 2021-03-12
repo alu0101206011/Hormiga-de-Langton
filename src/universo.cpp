@@ -11,7 +11,7 @@
 #include "../include/mundo.h"
 #include "../include/universo.h"
 
-void Universo::build_mundo(void) {
+/* void Universo::build_mundo(void) {
   mundo_ = new Mundo();
 }
 
@@ -21,7 +21,7 @@ void Universo::build_mundo(int m, int n) {
 
 void Universo::build_mundo(int seed) {
   mundo_ = new Mundo(seed);
-}
+} */
 
 void Universo::build_hormiga(void) {
   hormiga_ = new Hormiga*[HORMIGA_SIZE];
@@ -44,18 +44,17 @@ void Universo::build_hormiga(int seed) {
   }
 }
 
-Universo::Universo() {
-  build_mundo();
+Universo::Universo(Mundo* mundo): mundo_(mundo) {
   build_hormiga();
 }
 
 Universo::Universo(unsigned m, unsigned n) {
-  build_mundo(m, n);
+  //build_mundo(m, n);
   build_hormiga();
 }
 
 Universo::Universo(int seed) {
-  build_mundo(seed);
+  //build_mundo(seed);
   build_hormiga(seed);
 }
 
@@ -70,9 +69,8 @@ Hormiga** Universo::get_hormiga(void) const {
 void Universo::start_simulation(int iter) {
   std::cout << *this << "\n";
   for (int i = 0; i < iter; i++) {
-    system("clear");
+    //system("clear");
     for (unsigned i = 0; i < HORMIGA_SIZE; i++) {
-      //world_edge(hormiga_[i]->get_posicion_actual());
       hormiga_[i]->cerebro();
     }
     std::cout << *this << "\n";

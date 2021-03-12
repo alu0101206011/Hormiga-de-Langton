@@ -10,32 +10,25 @@
 
 
 
-int Regla::regla1(Hormiga* hormiga) {
-  Posicion posicion_actual, posicion_siguiente;
-  posicion_actual = hormiga->get_posicion_actual();
-  posicion_siguiente = hormiga->get_posicion_siguiente();  
-  if (hormiga->get_mundo()->get_color(posicion_actual) == hormiga->get_mundo()->get_color(posicion_siguiente)) {
-    if (hormiga->get_mundo()->get_color(posicion_actual) == 0) {
-      hormiga->get_mundo()->get_tablero()[posicion_actual.get_x()][posicion_actual.get_y()].set_color(1);
-    } else if (hormiga->get_mundo()->get_color(posicion_siguiente) == 1) {
-      hormiga->get_mundo()->get_tablero()[posicion_actual.get_x()][posicion_actual.get_y()].set_color(0);
+int Regla::regla1(Hormiga* hormiga) {  
+  if (hormiga->get_color_actual() == hormiga->get_color_siguiente()) {
+    if (hormiga->get_color_actual() == Blanco) {
+      hormiga->set_color_actual(Negro);
+    } else if (hormiga->get_color_siguiente() == Negro) {
+      hormiga->set_color_actual(Blanco);
     }
-    hormiga->actualizar_posiciones(posicion_siguiente);
+    hormiga->set_posiciones(hormiga->get_posicion_siguiente());
     return 1;
   } 
   return 0;
 }
 
-
 int Regla::regla2(Hormiga* hormiga) {
   Movimiento next_move;
-  Posicion posicion_actual, posicion_siguiente;
-  posicion_actual = hormiga->get_posicion_actual();
-  posicion_siguiente = hormiga->get_posicion_siguiente(); 
-  if (hormiga->get_mundo()->get_color(posicion_actual) == 0) {
+  if (hormiga->get_color_actual() == Blanco) {
     hormiga->set_direccion(next_move.get_girar_izquierda(hormiga->get_direccion()));
-    hormiga->get_mundo()->set_color(posicion_actual, 1);
-    hormiga->actualizar_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + posicion_actual);
+    hormiga->set_color_actual(Negro);
+    hormiga->set_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
     return 1; 
   } 
   return 0;
@@ -44,13 +37,10 @@ int Regla::regla2(Hormiga* hormiga) {
 
 int Regla::regla3(Hormiga* hormiga) {
   Movimiento next_move;
-  Posicion posicion_actual, posicion_siguiente;
-  posicion_actual = hormiga->get_posicion_actual();
-  posicion_siguiente = hormiga->get_posicion_siguiente();
-  if (hormiga->get_mundo()->get_color(posicion_actual) == 1) {
+  if (hormiga->get_color_actual() == Negro) {
     hormiga->set_direccion(next_move.get_girar_derecha(hormiga->get_direccion()));
-    hormiga->get_mundo()->set_color(posicion_actual, 0);
-    hormiga->actualizar_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
+    hormiga->set_color_actual(Blanco);
+    hormiga->set_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
     return 1;
   }
   return 0;

@@ -1,6 +1,8 @@
 /// Clase Celda
 /// Contiene la posición y el color
 
+enum Color {Blanco, Negro};
+
 class Celda {
  private:
   Posicion posicion_;

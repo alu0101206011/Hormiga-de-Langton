@@ -18,15 +18,19 @@ class Hormiga {
   Posicion get_posicion_siguiente(void) const;
   Regla get_movimiento(void) const;
   Mundo* get_mundo(void) const;
+  int get_color_actual(void) const;
+  int get_color_siguiente(void);
 
   void set_direccion(const Direcciones&);
   void set_movimiento(const Regla&);
   void set_mundo(Mundo* const&);
   void set_posiciones(const Posicion&);
   void set_posiciones(const int&, const int&);
+  void set_color_actual(const int&);
+  void set_color_siguiente(const int&);
 
-  void actualizar_posiciones(const Posicion&);
-  void actualizar_posiciones(const int&, const int&);
+  void actualizar_posicion(const Posicion&);
+  void actualizar_posicion(const int&, const int&);
 
   void cerebro(void);
 
