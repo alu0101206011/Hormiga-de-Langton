@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     return 0;
   }
   mundo = crear_mundo();
-  unsigned num_hormigas = 0;
+  int num_hormigas = 0;
   std::list<Hormiga> hormigas = eleccion_hormigas(mundo, num_hormigas);
   Universo universe(mundo, hormigas, num_hormigas);
   unsigned nturnos = turnos();

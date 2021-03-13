@@ -113,16 +113,16 @@ Mundo* crear_mundo(void) {
 }
 
 
-std::list<Hormiga> eleccion_hormigas(Mundo* mundo, unsigned& num_hormigas) {
+std::list<Hormiga> eleccion_hormigas(Mundo* mundo, int& num_hormigas) {
   num_hormigas = 0;
   std::list<Hormiga> hormiga_list;
   do {
     std::cout << "\n¿Cuántas hormigas desea tener?\n Número de hormigas deseadas: ";
     num_hormigas = control_errores_int();
-  } while (num_hormigas == 0 || num_hormigas > mundo->get_size().filas_ * mundo->get_size().columnas_);
+  } while (num_hormigas <= 0 && (unsigned)num_hormigas > mundo->get_size().filas_ * mundo->get_size().columnas_);
   const char defecto = default_tipo(0);
   if (defecto == 'n') {
-    unsigned contador = 0;
+    int contador = 0;
     while (num_hormigas > contador) {
       std::cout << "\nPosición hormiga " << contador + 1 << "\n";
       Posicion posicion = posiciones(mundo);
@@ -171,11 +171,11 @@ int control_errores_int(void) {
 
 unsigned turnos(void) {
   std::cout << "\nNúmero de turnos que quiere: ";
-  unsigned turnos = 0;
+  int turnos = 0;
   do {
     turnos = control_errores_int();
   } while (turnos <= 0);
-  return turnos;
+  return (unsigned)turnos;
 }
 
 Velocidad velocidad_preferida(void) {

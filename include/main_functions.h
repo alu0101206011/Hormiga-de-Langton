@@ -7,6 +7,6 @@ char tipo_mundo(void);
 char default_tipo(int tipo);
 Posicion posiciones(Mundo* mundo);
 int control_errores_int(void);
-std::list<Hormiga> eleccion_hormigas(Mundo* mundo, unsigned& num_hormigas);
+std::list<Hormiga> eleccion_hormigas(Mundo* mundo, int& num_hormigas);
 unsigned turnos(void);
 Velocidad velocidad_preferida(void);
