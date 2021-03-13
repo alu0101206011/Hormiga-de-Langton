@@ -70,7 +70,7 @@ char default_tipo(int tipo) {
   if (tipo == 1) std::cout << "un mundo";
   else if (tipo == 0) std::cout << "las hormigas";
   else std::cout << "todo";
-  std::cout << " por defecto? "; 
+  std::cout << " por defecto? Seleccione 's' o 'n': "; 
   do {
     std::cin >> decision;
     switch (decision) {
@@ -91,9 +91,9 @@ Mundo* crear_mundo(void) {
   const char defecto = default_tipo(1);
   if (defecto == 'n') {
     do {
-      std::cout << "Tamaño del mundo que desea: \nFilas: ";
+      std::cout << "Tamaño del mundo que desea: \n Filas: ";
       m = control_errores_int();
-      std::cout << "Columnas: ";
+      std::cout << " Columnas: ";
       n = control_errores_int();
     } while (m <= 1 && n <= 1);
   }
@@ -119,7 +119,10 @@ std::list<Hormiga> eleccion_hormigas(Mundo* mundo, int& num_hormigas) {
   do {
     std::cout << "\n¿Cuántas hormigas desea tener?\n Número de hormigas deseadas: ";
     num_hormigas = control_errores_int();
-  } while (num_hormigas <= 0 && (unsigned)num_hormigas > mundo->get_size().filas_ * mundo->get_size().columnas_);
+    if (num_hormigas <= 0 || (unsigned)num_hormigas > mundo->get_size().filas_ * mundo->get_size().columnas_) {
+      std::cout << "Número de hormigas no válido.\n";
+    }
+  } while (num_hormigas <= 0 || (unsigned)num_hormigas > mundo->get_size().filas_ * mundo->get_size().columnas_);
   const char defecto = default_tipo(0);
   if (defecto == 'n') {
     int contador = 0;
