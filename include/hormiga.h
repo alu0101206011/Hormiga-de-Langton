@@ -34,11 +34,12 @@ class Hormiga {
 
   void cerebro(void);
 
+  bool operator<(const Hormiga&);
   friend std::ostream& operator<<(std::ostream&, const Hormiga&);
 
  private:
   void set_posicion_actual(const Posicion&);
   void set_posicion_actual(const int&, const int&);
-  void set_posicion_siguiente(const Posicion&);
   void set_posicion_siguiente(void);
+  void set_posicion_siguiente(const Posicion&);
 };

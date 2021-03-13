@@ -59,24 +59,17 @@ int Hormiga::get_color_siguiente(void) {
 
 void Hormiga::set_direccion(const Direcciones& kNewDireccion) {
   direccion_ = kNewDireccion;
+  set_posicion_siguiente();
 }
 
 void Hormiga::set_posiciones(const Posicion& kNewPosicion) {
-  Posicion aux = get_posicion_actual();
-  mundo_->world_edge(this);
-  if (aux == get_posicion_actual()) {
-    set_posicion_actual(kNewPosicion);
-    set_posicion_siguiente();
-  }
+  set_posicion_actual(kNewPosicion);
+  set_posicion_siguiente();
 }
 
 void Hormiga::set_posiciones(const int& kNewX, const int& kNewY) {
-  Posicion aux = get_posicion_actual();
-  mundo_->world_edge(this);
-  if (aux == get_posicion_actual()) {
-    set_posicion_actual(kNewX, kNewY);
-    set_posicion_siguiente();
-  }
+  set_posicion_actual(kNewX, kNewY);
+  set_posicion_siguiente();
 }
 
 void Hormiga::set_posicion_actual(const Posicion& kNewPosicion) {
@@ -111,20 +104,27 @@ void Hormiga::set_color_actual(const int& kNewColor) {
 }
 
 void Hormiga::set_color_siguiente(const int& kNewColor) {
-  mundo_->set_color(posicion_siguiente_, kNewColor);
+  Posicion aux = get_posicion_actual();
+  mundo_->world_edge(this);
+  if (aux == get_posicion_actual())
+    mundo_->set_color(posicion_siguiente_, kNewColor);
 }
 
-
 void Hormiga::actualizar_posicion(const Posicion& kNewPosicion) {
-  set_posicion_actual(kNewPosicion);
+  Posicion aux = get_posicion_actual();
+  mundo_->world_edge(this);
+  if (aux == get_posicion_actual())
+    set_posicion_actual(kNewPosicion);
   set_posicion_siguiente();
 }
 
 void Hormiga::actualizar_posicion(const int& kNewX, const int& kNewY) {
-  set_posicion_actual(kNewX, kNewY);
+  Posicion aux = get_posicion_actual();
+  mundo_->world_edge(this);
+  if (aux == get_posicion_actual())
+    set_posicion_actual(kNewX, kNewY);
   set_posicion_siguiente();
 }
-
 
 void Hormiga::cerebro(void) {
   Regla regla;
@@ -135,6 +135,11 @@ void Hormiga::cerebro(void) {
   } else if (regla.regla3(this)) {
     return;
   }
+}
+
+
+bool Hormiga::operator<(const Hormiga& kOtherHormiga) {
+  return posicion_actual_ < kOtherHormiga.get_posicion_actual();
 }
 
 
@@ -151,3 +156,6 @@ std::ostream& operator<<(std::ostream& os, const Hormiga& kHormiga) {
   default: return os << "E ";
   }
 }
+
+
+

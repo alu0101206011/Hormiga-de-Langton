@@ -17,7 +17,7 @@ int Regla::regla1(Hormiga* hormiga) {
     } else if (hormiga->get_color_siguiente() == Negro) {
       hormiga->set_color_actual(Blanco);
     }
-    hormiga->set_posiciones(hormiga->get_posicion_siguiente());
+    hormiga->actualizar_posicion(hormiga->get_posicion_siguiente());
     return 1;
   } 
   return 0;
@@ -28,7 +28,7 @@ int Regla::regla2(Hormiga* hormiga) {
   if (hormiga->get_color_actual() == Blanco) {
     hormiga->set_direccion(next_move.get_girar_izquierda(hormiga->get_direccion()));
     hormiga->set_color_actual(Negro);
-    hormiga->set_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
+    hormiga->actualizar_posicion(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
     return 1; 
   } 
   return 0;
@@ -40,7 +40,7 @@ int Regla::regla3(Hormiga* hormiga) {
   if (hormiga->get_color_actual() == Negro) {
     hormiga->set_direccion(next_move.get_girar_derecha(hormiga->get_direccion()));
     hormiga->set_color_actual(Blanco);
-    hormiga->set_posiciones(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
+    hormiga->actualizar_posicion(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
     return 1;
   }
   return 0;

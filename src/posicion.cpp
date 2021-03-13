@@ -31,6 +31,16 @@ bool Posicion::operator!=(const Posicion& kOtherPosition) {
            y_ != kOtherPosition.get_y());
 }
 
+bool Posicion::operator<(const Posicion& kOtherPosition) {
+  if (x_ < kOtherPosition.get_x()) { 
+    return true;
+  } else {
+    if (x_ == kOtherPosition.get_x() && y_ < kOtherPosition.get_y()) 
+      return true;
+  }
+  return false;
+}
+
 Posicion Posicion::operator+(const Posicion& kOtherPosition) {
   Posicion result;
   result.set_x(kOtherPosition.get_x() + x_);

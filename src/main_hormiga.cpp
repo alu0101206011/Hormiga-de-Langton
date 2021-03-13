@@ -12,7 +12,7 @@
 ///
 /// To compile: make
 /// To clean files: make clean
-/// g++ -g -Wall --std=c++17 -o ./bin/hormiga src/vector.cpp src/posicion.cpp src/movimiento.cpp src/celda.cpp src/reglas.cpp src/hormiga.cpp src/mundo.cpp src/mundofinito.cpp src/mundoinfinito.cpp src/universo.cpp src/main_hormiga.cpp
+/// g++ -g -Wall --std=c++17 -o ./bin/hormiga src/vector.cpp src/posicion.cpp src/movimiento.cpp src/celda.cpp src/reglas.cpp src/hormiga.cpp src/mundo.cpp src/mundofinito.cpp src/mundoinfinito.cpp src/universo.cpp src/main_functions.cpp src/main_hormiga.cpp
 
 #include <iostream>
 #include <list>
@@ -28,29 +28,26 @@
 #include "../include/mundofinito.h"
 #include "../include/mundoinfinito.h"
 #include "../include/universo.h"
-
-void Usage(int argc, char *argv[]);
-
+#include "../include/main_functions.h"
 
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
-  Mundo *mundo;
-  mundo = new MundoInfinito();
-  Universo universe(mundo);
-  universe.start_simulation(40);
+  cabecera();
+  Mundo* mundo;
+  if (todo_default(mundo)) {
+    std::list<Hormiga> hormigas;
+    Universo universe(mundo, hormigas, 1);
+    universe.start_simulation(40, medio);
+    return 0;
+  }
+  mundo = crear_mundo();
+  unsigned num_hormigas = 0;
+  std::list<Hormiga> hormigas = eleccion_hormigas(mundo, num_hormigas);
+  Universo universe(mundo, hormigas, num_hormigas);
+  unsigned nturnos = turnos();
+  Velocidad velocidad = velocidad_preferida();
+  universe.start_simulation(nturnos, velocidad);
   return 0;
 }
 
 
-void Usage(int argc, char *argv[]) {
-  if (argc == 2)
-    if((std::string)argv[1] == "-h" || (std::string)argv[1] == "--help") {
-      std::cout << "Uso: " << argv[0] << " [Sin opciones]\n";
-      exit(0);
-    }
-  if (argc != 1) {
-    std::cout << "Tiene argumentos invalidos.\nEscriba "
-              << "--help para más ayuda\n";
-    exit(1);
-  } 
-}

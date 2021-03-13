@@ -1,5 +1,4 @@
 const unsigned NUM_COLOR = 2;
-const unsigned HORMIGA_SIZE = 1;
 const unsigned ADD_SIZE = 1;
 
 struct BoardSize {
@@ -34,7 +33,7 @@ class Mundo {
   void set_tablero(MatrizCeldas const&);
   void set_color(const Posicion&, int);
 
-  virtual void world_edge(Hormiga*) = 0;
+  virtual void world_edge(Hormiga*) = 0;  // quitarle virtual y que world_working o algo así sea el virtual
 
  protected: 
   Direcciones es_una_esquina(Posicion);

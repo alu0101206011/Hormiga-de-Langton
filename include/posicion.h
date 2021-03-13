@@ -16,5 +16,6 @@ class Posicion {
 
   bool operator==(const Posicion&);
   bool operator!=(const Posicion&);
+  bool operator<(const Posicion&);
   Posicion operator+(const Posicion&);
 };
