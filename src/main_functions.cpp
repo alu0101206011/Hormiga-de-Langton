@@ -21,7 +21,7 @@ void Usage(int argc, char *argv[]) {
       exit(0);
     }
   if (argc != 1) {
-    std::cout << "Tiene argumentos invalidos.\nEscriba "
+    std::cout << "Tiene argumentos inválidos.\nEscriba "
               << "--help para más ayuda\n";
     exit(1);
   } 
@@ -90,12 +90,15 @@ Mundo* crear_mundo(void) {
   Mundo* mundo;
   const char defecto = default_tipo(1);
   if (defecto == 'n') {
+    std::cout << "Tamaño del mundo que desea:\n";
     do {
-      std::cout << "Tamaño del mundo que desea: \n Filas: ";
+      std::cout << " Filas: ";
       m = control_errores_int();
       std::cout << " Columnas: ";
       n = control_errores_int();
-    } while (m <= 1 && n <= 1);
+      if (m <= 1 || n <= 1) 
+        std::cout << "Introduzca un tamaño de mundo válido.\n\n";
+    } while (m <= 1 || n <= 1);
   }
   switch (tipo) {
   case 'f': 
@@ -106,8 +109,7 @@ Mundo* crear_mundo(void) {
     if (defecto == 's') mundo = new MundoInfinito();
     else mundo = new MundoInfinito(m,n);
     break;  
-  default:
-    break;
+  default: break;
   }
   return mundo;
 }
@@ -141,13 +143,13 @@ std::list<Hormiga> eleccion_hormigas(Mundo* mundo, int& num_hormigas) {
 Posicion posiciones(Mundo* mundo) {
   int i,j;
   do{
-    std::cout << "Posicion i: ";
+    std::cout << "Posición i: ";
     i = control_errores_int();
-    std::cout << "Posicion j: ";
+    std::cout << "Posición j: ";
     j = control_errores_int();
-    if (i < mundo->get_size().Xmin || i > mundo->get_size().Xmax || j < mundo->get_size().Ymin || j > mundo->get_size().Ymax)
-      std::cout << '\n' <<"Posicion no valida, intentelo de nuevo. " << '\n';
-  } while (i < mundo->get_size().Xmin || i > mundo->get_size().Xmax || j < mundo->get_size().Ymin || j > mundo->get_size().Ymax);
+    if (i < mundo->get_size().Xmin || i > mundo->get_size().Xmax - 1 || j < mundo->get_size().Ymin || j > mundo->get_size().Ymax - 1)
+      std::cout << '\n' <<"Posición no válida, inténtelo de nuevo. " << '\n';
+  } while (i < mundo->get_size().Xmin || i > mundo->get_size().Xmax - 1 || j < mundo->get_size().Ymin || j > mundo->get_size().Ymax - 1);
   Posicion posicion(i,j);
   return posicion;
 }
@@ -162,8 +164,8 @@ int control_errores_int(void) {
           break;
         }
       } else {
-        std::cout << "\nSe a introducido una opción no valida\n";
-        std::cout << "Introduzca la opcion otra vez: ";
+        std::cout << "\nSe ha introducido una opción no válida\n";
+        std::cout << "Introduzca la opción otra vez: ";
         std::cin >> param;
       }
     }
@@ -182,7 +184,7 @@ unsigned turnos(void) {
 }
 
 Velocidad velocidad_preferida(void) {
-  std::cout << "\nVelocidad preferida: [1] Lento, [2] Medio, [3] Rapido \n";
+  std::cout << "\nVelocidad preferida: [1] Lento, [2] Medio, [3] Rápido \n";
   unsigned veloz = 0;
   do {
     veloz = control_errores_int();
