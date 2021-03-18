@@ -3,28 +3,35 @@ Algoritmos y Estructuras de Datos Avanzadas.
 
 Curso 2020-2021.
 
-## Práctica 3: Mundo Hormigas
+## Práctica 4: Mundo Hormigas Modificado
 ### Objetivo 
-El objetivo de esta práctica es utilizar el polimorfismo dinámico en tipos de datos definidos por el usuario en un programa en lenguaje C++
+El objetivo de esta práctica es utilizar el polimorfismo dinámico y el manejo de excepciones en tipos de datos definidos por el usuario en un programa en lenguaje C++.
 
 
 ### Entrega
-Esta práctica se entregará en la sesión de laboratorio realizada entre las fechas del 15 al 19 de marzo. Durante esta sesión se podrán solicitar modificaciones sobre la práctica. En el actual escenario de presencialidad adaptada, la entrega se realizará en tareas separadas para la rotación con asistencia presencial y la rotación con asistencia online.
+Esta práctica se entregará en la sesión de laboratorio realizada entre las fechas del 22 al 26 de marzo. Durante esta sesión se podrán solicitar modificaciones sobre la práctica. En el actual escenario de presencialidad adaptada, la entrega se realizará en tareas separadas para la rotación con asistencia presencial y la rotación con asistencia online.
 
 
 ### Enunciado
-A partir de la implementación de la **hormiga de Langton modificada**, realizada en la práctica 2, en esta práctica se pide realizar las siguientes modificaciones:
+A partir de la implementación de la práctica 3, **Mundo Hormigas**, en esta práctica se pide realizar las siguientes modificaciones:
 
 
-* 1. En las prácticas anteriores se han implementado dos versiones alternativas del objeto **Mundo**. En la primera práctica la malla bidimensional tiene unas dimensiones constantes, fijadas al inicio de la ejecución y que no varían durante las misma. Cuando una hormiga rebasa alguno de los bordes de la malla, reaparece por el borde opuesto. En la segunda práctica se asume una malla bidimensional infinita. Inicialmente se establecen unas dimensiones, pero estas aumentan cada vez que la hormiga alcanza una posición fuera de la malla actual.
-En esta práctica vamos a implantar un programa que permita al usuario seleccionar la implementación del objeto **Mundo** que quiere utilizar. Para ello, la clase **Mundo** se convierte en una interfaz (clase abstracta) que establece las operaciones que deben implementar las clases que definen los objetos mundos particulares (**MundoFinito**, **MundoInfinito**).
+* 1. En la práctica anterior se añadieron las siguientes operaciones a la clase **Hormiga**:
+     - El método privado ``Girar(Color)``, que a partir de la dirección guardada y el color de la celda que ocupa, aplica la regla para el cambio de dirección.
+     - El método privado ``Desplazar()``, que realiza el cambio de posición de la hormiga.
+     -  El método público ``Actualizar(Mundo&)``, que es invocado desde el bucle que controla el paso del tiempo en el objeto **Universo**. Este método pregunta al objeto **Mundo** por el color de la celda que ocupa la hormiga, le pide al objeto **Mundo** que actualice el color de dicha celda, e invoca a los métodos ``Girar()`` y ``Desplazar()``.
+   * En esta práctica se pide que el método ``Actualizar()`` pase a ser un método virtual, y que los métodos ``Girar()`` y ``Desplazar()`` pasen a ser métodos nulos. De esta forma la clase Hormiga se convierte en una clase abstracta que utilizaremos como clase base para derivar una jerarquía de diferentes tipos de hormigas con distintas reglas de actualización. Implementar, al menos, dos tipos de hormigas:
+     -  Tipo a. Tiene el comportamiento de la Hormiga de Langton.
+     -  Tipo b. Tiene un comportamiento inverso a la Hormiga de Langton Modificada.
 
 
-* 2. En el objeto **Hormiga** se quiere separar la implementación del código de actualización del movimiento. Para ello se crean métodos privados que calculan por separado el giro y el desplazamiento. Estos métodos privados son llamados desde el método público que actualiza el movimiento en cada paso de la simulación
-Se incrementa el número de hormigas que coexisten en el mundo. Inicialmente se crean en posiciones del mundo, y direcciones, dadas por el usuario. Las hormigas se almacenan en una lista ordenada por la posición que ocupa, de forma que el orden de las hormigas en la lista coincida con el orden en que se las encontrará el método de visualización de la malla del mundo.
+* 2. Se mantienen las dos versiones alternativas de implementación del objeto **Mundo**, un mundo finito y un mundo infinito. La clase **Mundo** es la clase base de las clases derivadas que implementan los mundos alternativos.
+  - La responsabilidad de cualquiera de las clases derivadas de la clase **Mundo** es gestionar la malla bidimensional de celdas que contiene los colores utilizados por las reglas de actualización de los objetos **Hormiga**. Para la implementación de la malla en el objeto **MundoInfinito** se utilizará la clase genérica ``Vector<T>``, indicada en la práctica 3, que admite la indexación de sus elementos con valores negativos.
 
 
-* 3. El programa principal solicita al usuario que elija el tipo de mundo, así como sus dimensiones, y también el número de hormigas que coexisten en el mundo. Instancia al objeto **Mundo** y la lista de objetos **Hormiga** y los pasa como parámetro al constructor del objeto **Universo** para que realice la simulación.
+* 3. En la clase genérica ``Vector<T>`` se utiliza el mecanismo de manejo de excepciones para indicar la situación de error que se produce al intentar acceder a una posición del vector fuera del rango de valores de índices válidos. La clase ``Vector<T>`` genera un objeto derivado de la clase ``std::exception`` y lanza la excepción. En el objeto **Mundo** se captura la excepción y se realiza la acción que corresponda para tratarla:
+    - Si se trata del objeto **MundoFinito** actualiza la posición de la hormiga para que vuelva a estar posicionada sobre la malla.
+    -  Si se trata del objeto **MundoInfinito** crea una nueva malla con las dimensiones actualizadas para que la hormiga quede bien posicionada.
 
 
-* 4. El constructor del objeto Universo recibe como parámetros un objeto de tipo **Mundo** y una lista de objetos **Hormiga** colocadas sobre la malla del mundo. Controla el paso del tiempo, la actualización de las hormigas y la visualización del mundo hasta que el usuario detenga la simulación.
+* 4. El programa principal solicita al usuario que elija el tipo de mundo, así como sus dimensiones. También pregunta el número de hormigas que coexisten en el mundo, y para cada una de ellas solicita el tipo a instanciar y la posición que ocupa inicialmente. Se crea el objeto Mundo y la lista de punteros a la clase base **Hormiga**, de forma que para cada hormiga se aplique la regla de actualización que corresponde a su tipo. El objeto **Mundo** y la lista de objetos **Hormiga** se pasan como parámetros al constructor del objeto **Universo** para que realice la simulación.
