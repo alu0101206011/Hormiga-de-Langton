@@ -10,6 +10,8 @@
 #include "../include/mundo.h"
 #include "../include/mundofinito.h"
 #include "../include/mundoinfinito.h"
+#include "../include/hormiga_langton.h"
+#include "../include/hormiga_inverso.h"
 #include "../include/universo.h"
 #include "../include/main_functions.h"
 
@@ -37,15 +39,19 @@ void cabecera(void) {
             << "----------------------------------------\n\n";
 }
 
-bool todo_default(Mundo* &mundo) {
+bool todo_default(Mundo* &mundo, std::list<Hormiga*> &hormiga_list) {
   char default_dado = default_tipo(3);
   if (default_dado == 's') {
     const char tipo = tipo_mundo();
+    hormiga_list.clear();
     switch (tipo) {
       case 'f': mundo = new MundoFinito(); break;
       case 'i': mundo = new MundoInfinito(); break; 
       default: break;
     }
+    Posicion posicion(0,0);
+    Hormiga* hormiga = crear_hormiga(mundo, posicion);
+    hormiga_list.push_back(hormiga);
     return true;
   }
   return false;
@@ -114,10 +120,28 @@ Mundo* crear_mundo(void) {
   return mundo;
 }
 
+Hormiga* crear_hormiga(Mundo* mundo, Posicion posicion) {
+  char decision = '\0';
+  std::cout << "¿Qué tipo de hormiga desea?\n"
+            << "Hormiga Langton [l]\nHormiga Inversa Langton[i]\n";
+  do {
+    std::cin >> decision;
+    switch (decision) {
+    case 'l': break;
+    case 'i': break;
+    default: std::cout << "Seleccione 'l' o 'i' para seleccionar tipo de hormiga.\n";
+      decision = '\0'; break;
+    }
+  } while (decision == '\0');
+  Hormiga* hormiga;
+  if (decision == 'l') hormiga = new HormigaLangton(*mundo, posicion.get_x(), posicion.get_y());
+  else hormiga = new HormigaInverso(*mundo, posicion.get_x(), posicion.get_y());
+  return hormiga;
+}
 
-std::list<Hormiga> eleccion_hormigas(Mundo* mundo, int& num_hormigas) {
+std::list<Hormiga*> eleccion_hormigas(Mundo* mundo, int& num_hormigas) {
   num_hormigas = 0;
-  std::list<Hormiga> hormiga_list;
+  std::list<Hormiga*> hormiga_list;
   do {
     std::cout << "\n¿Cuántas hormigas desea tener?\n Número de hormigas deseadas: ";
     num_hormigas = control_errores_int();
@@ -126,15 +150,22 @@ std::list<Hormiga> eleccion_hormigas(Mundo* mundo, int& num_hormigas) {
     }
   } while (num_hormigas <= 0 || (unsigned)num_hormigas > mundo->get_size().filas_ * mundo->get_size().columnas_);
   const char defecto = default_tipo(0);
+  int contador = 0;
   if (defecto == 'n') {
-    int contador = 0;
     while (num_hormigas > contador) {
       std::cout << "\nPosición hormiga " << contador + 1 << "\n";
       Posicion posicion = posiciones(mundo);
-      Hormiga hormiga(*mundo, posicion.get_x(), posicion.get_y());
+      Hormiga* hormiga = crear_hormiga(mundo, posicion);
       hormiga_list.push_back(hormiga);
       contador++;
     }
+  } else {
+    while (num_hormigas > contador) {
+      Posicion posicion(0,0);
+      Hormiga* hormiga = crear_hormiga(mundo, posicion);
+      hormiga_list.push_back(hormiga);  
+      contador++;
+    }  
   }
   return hormiga_list;
 }

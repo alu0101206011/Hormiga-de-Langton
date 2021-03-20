@@ -126,22 +126,10 @@ void Hormiga::actualizar_posicion(const int& kNewX, const int& kNewY) {
   set_posicion_siguiente();
 }
 
-void Hormiga::cerebro(void) {
-  Regla regla;
-/*   if (regla.regla1(this)) {
-    return;
-  } else */ if (regla.regla2(this)) {
-    return;
-  } else if (regla.regla3(this)) {
-    return;
-  }
-}
-
 
 bool Hormiga::operator<(const Hormiga& kOtherHormiga) {
   return posicion_actual_ < kOtherHormiga.get_posicion_actual();
 }
-
 
 std::ostream& operator<<(std::ostream& os, const Hormiga& kHormiga) {
   switch (kHormiga.get_direccion()) {

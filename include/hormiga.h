@@ -1,7 +1,7 @@
 class Mundo;
 
 class Hormiga {
- private:
+ protected:
   Direcciones direccion_;
   Posicion posicion_actual_;
   Posicion posicion_siguiente_;
@@ -32,7 +32,7 @@ class Hormiga {
   void actualizar_posicion(const Posicion&);
   void actualizar_posicion(const int&, const int&);
 
-  void cerebro(void);
+  virtual void cerebro(void) = 0;
 
   bool operator<(const Hormiga&);
   friend std::ostream& operator<<(std::ostream&, const Hormiga&);
@@ -40,6 +40,8 @@ class Hormiga {
  private:
   void set_posicion_actual(const Posicion&);
   void set_posicion_actual(const int&, const int&);
-  void set_posicion_siguiente(void);
   void set_posicion_siguiente(const Posicion&);
+
+ protected:
+  void set_posicion_siguiente(void);
 };

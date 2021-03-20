@@ -27,6 +27,8 @@
 #include "../include/mundo.h"
 #include "../include/mundofinito.h"
 #include "../include/mundoinfinito.h"
+#include "../include/hormiga_langton.h"
+#include "../include/hormiga_inverso.h"
 #include "../include/universo.h"
 #include "../include/main_functions.h"
 
@@ -34,15 +36,15 @@ int main(int argc, char *argv[]) {
   Usage(argc, argv);
   cabecera();
   Mundo* mundo;
-  if (todo_default(mundo)) {
-    std::list<Hormiga> hormigas;
-    Universo universe(mundo, hormigas, 1);
+  std::list<Hormiga*> hormigas;
+  if (todo_default(mundo, hormigas)) {
+    Universo universe(mundo, hormigas, hormigas.size());
     universe.start_simulation(40, medio);
     return 0;
   }
   mundo = crear_mundo();
   int num_hormigas = 0;
-  std::list<Hormiga> hormigas = eleccion_hormigas(mundo, num_hormigas);
+  hormigas = eleccion_hormigas(mundo, num_hormigas);
   Universo universe(mundo, hormigas, num_hormigas);
   unsigned nturnos = turnos();
   Velocidad velocidad = velocidad_preferida();
