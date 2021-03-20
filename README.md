@@ -31,7 +31,7 @@ A partir de la implementación de la práctica 3, **Mundo Hormigas**, en esta pr
 
 * 3. En la clase genérica ``Vector<T>`` se utiliza el mecanismo de manejo de excepciones para indicar la situación de error que se produce al intentar acceder a una posición del vector fuera del rango de valores de índices válidos. La clase ``Vector<T>`` genera un objeto derivado de la clase ``std::exception`` y lanza la excepción. En el objeto **Mundo** se captura la excepción y se realiza la acción que corresponda para tratarla:
     - Si se trata del objeto **MundoFinito** actualiza la posición de la hormiga para que vuelva a estar posicionada sobre la malla.
-    -  Si se trata del objeto **MundoInfinito** crea una nueva malla con las dimensiones actualizadas para que la hormiga quede bien posicionada.
+    - Si se trata del objeto **MundoInfinito** crea una nueva malla con las dimensiones actualizadas para que la hormiga quede bien posicionada.
 
 
 * 4. El programa principal solicita al usuario que elija el tipo de mundo, así como sus dimensiones. También pregunta el número de hormigas que coexisten en el mundo, y para cada una de ellas solicita el tipo a instanciar y la posición que ocupa inicialmente. Se crea el objeto Mundo y la lista de punteros a la clase base **Hormiga**, de forma que para cada hormiga se aplique la regla de actualización que corresponde a su tipo. El objeto **Mundo** y la lista de objetos **Hormiga** se pasan como parámetros al constructor del objeto **Universo** para que realice la simulación.
