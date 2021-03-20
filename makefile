@@ -1,9 +1,19 @@
 CC = g++
 CFLAGS = -g -Wall --std=c++17
-OBJ = ./obj/vector.o ./obj/posicion.o ./obj/movimiento.o ./obj/celda.o ./obj/reglas.o ./obj/hormiga.o ./obj/mundo.o ./obj/mundofinito.o ./obj/mundoinfinito.o ./obj/universo.o ./obj/main_functions.o ./obj/main_hormiga.o 
+
+OBJ_DIR := ./obj
+SRC_DIR := ./src
 EXEC = ./bin/hormiga
 
-all: $(OBJ)
+SRCS := $(shell ls $(SRC_DIR))
+
+OBJS := $(SRCS:%=$(OBJ_DIR)/%)
+OBJS := $(OBJS:.cpp=.o)
+
+SRCS := $(SRCS:%=$(SRC_DIR)/%)
+
+
+all: $(OBJS)
 	$(CC) $(CFLAGS) -o $(EXEC) $^
 
 ./obj/%.o: ./src/%.cpp 
@@ -11,6 +21,9 @@ all: $(OBJ)
 
 run: clean all
 	$(EXEC)
+
+debug: $(SRCS)
+		$(CC) $(CFLAGS) -o $(EXEC) $^
 
 .PHONY: clean
 
