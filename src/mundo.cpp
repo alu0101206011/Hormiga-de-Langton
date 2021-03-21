@@ -89,13 +89,13 @@ void Mundo::set_color(const Posicion& kPosicion, int color) {
 
 
 Direcciones Mundo::es_una_esquina(Posicion posicion) {
-  if (posicion.get_x() == size_.Xmin && posicion.get_y() == size_.Ymin) {
+  if (posicion.get_x() < size_.Xmin && posicion.get_y() < size_.Ymin) {
     return arriba_izquierda;
-  } else if (posicion.get_x() == size_.Xmin && posicion.get_y() == size_.Ymax - 1) {
+  } else if (posicion.get_x() < size_.Xmin && posicion.get_y() > size_.Ymax - 1) {
     return arriba_derecha;
-  } else if (posicion.get_x() == size_.Xmax - 1 && posicion.get_y() == size_.Ymin) {
+  } else if (posicion.get_x() > size_.Xmax - 1 && posicion.get_y() < size_.Ymin) {
     return abajo_izquierda;
-  } else if (posicion.get_x() == size_.Xmax - 1 && posicion.get_y() == size_.Ymax - 1) {
+  } else if (posicion.get_x() > size_.Xmax - 1 && posicion.get_y() > size_.Ymax - 1) {
     return abajo_derecha;
   }
   return (Direcciones)-1;

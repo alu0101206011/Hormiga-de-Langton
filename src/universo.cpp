@@ -37,16 +37,10 @@ void Universo::next_hormiga_pos(void) {
 }
 
 Universo::Universo(Mundo* mundo, std::list<Hormiga*> hormiga_list, unsigned num_hormigas)
-     : mundo_(mundo), hormiga_list_(hormiga_list), HORMIGA_SIZE(num_hormigas) {
-/*   if (hormiga_list_.empty())
-    build_hormiga(); */
-}
+     : mundo_(mundo), hormiga_list_(hormiga_list), HORMIGA_SIZE(num_hormigas) {}
 
 Universo::Universo(Mundo* mundo,  std::list<Hormiga*> hormiga_list, int seed, unsigned num_hormigas)
-     : mundo_(mundo), hormiga_list_(hormiga_list), HORMIGA_SIZE(num_hormigas) {
-/*   if (hormiga_list_.empty())
-    build_hormiga(seed); */
-}
+     : mundo_(mundo), hormiga_list_(hormiga_list), HORMIGA_SIZE(num_hormigas) {}
 
 Mundo* Universo::get_mundo(void) const {
   return mundo_;
@@ -62,7 +56,7 @@ void Universo::start_simulation(int iter, Velocidad velocidad) {
   int simulation_speed = velocidad_simulacion(velocidad);
   for (int i = 0; i < iter; i++) {
     usleep(simulation_speed);
-    //system("clear");
+    system("clear");
     for (Hormiga* hormiga : hormiga_list_) {
       hormiga->cerebro();
     }

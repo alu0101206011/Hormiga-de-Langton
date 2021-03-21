@@ -1,8 +1,10 @@
 #include <iostream>
+#include <exception>
 
 #include "../include/posicion.h"
 #include "../include/celda.h"
 #include "../include/vector.h"
+#include "../include/exceptions_hormiga.h"
 
 template <class T> 
 void Vector<T>::remove(void) {
@@ -89,8 +91,7 @@ Vector<T>& Vector<T>::operator=(const Vector<T>& kNewVector) {
 template <class T> 
 T& Vector<T>::operator[](const int& i) { 
   if (i < lower_ || i >= upper_) {
-    std::cout << "Outside array bounds";
-    exit(1);
+    throw 3;
   } else {
       return a_[i-lower_];
   }
@@ -99,8 +100,7 @@ T& Vector<T>::operator[](const int& i) {
 template<class T>
 T Vector<T>::operator[](const int& i) const {
   if (i < lower_ || i >= upper_) {
-    std::cout << "Outside array bounds";
-    exit(1);
+    throw 3;
   } else {
       return a_[i-lower_];
   }

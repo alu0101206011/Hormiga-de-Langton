@@ -8,6 +8,7 @@
 #include "../include/hormiga.h"
 #include "../include/vector.h"
 #include "../include/mundo.h"
+#include "../include/exceptions_hormiga.h"
 
 
 Hormiga::Hormiga(Mundo& mundo, int semilla): direccion_(arriba), mundo_(&mundo) {
@@ -104,26 +105,35 @@ void Hormiga::set_color_actual(const int& kNewColor) {
 }
 
 void Hormiga::set_color_siguiente(const int& kNewColor) {
-  Posicion aux = get_posicion_actual();
-  mundo_->world_edge(this);
-  if (aux == get_posicion_actual())
-    mundo_->set_color(posicion_siguiente_, kNewColor);
+  try {  
+  mundo_->set_color(posicion_siguiente_, kNewColor);
+  } catch (int) {
+    mundo_->world_edge(this);
+  }   
 }
 
 void Hormiga::actualizar_posicion(const Posicion& kNewPosicion) {
-  Posicion aux = get_posicion_actual();
-  mundo_->world_edge(this);
-  if (aux == get_posicion_actual())
+  try {
     set_posicion_actual(kNewPosicion);
-  set_posicion_siguiente();
+    mundo_->get_tablero()[kNewPosicion.get_x()][kNewPosicion.get_y()];
+    set_posicion_siguiente();
+  } catch (int& e) {
+    //e.what();
+    mundo_->world_edge(this);
+  }
 }
 
 void Hormiga::actualizar_posicion(const int& kNewX, const int& kNewY) {
-  Posicion aux = get_posicion_actual();
-  mundo_->world_edge(this);
-  if (aux == get_posicion_actual())
+  try {
     set_posicion_actual(kNewX, kNewY);
-  set_posicion_siguiente();
+    mundo_->get_tablero()[kNewX][kNewY];
+    set_posicion_siguiente();
+    //throw 2;
+  } catch (int& e) {
+    //e.what();
+    std::cout << "hola\n";
+    mundo_->world_edge(this);
+  }
 }
 
 

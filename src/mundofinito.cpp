@@ -24,22 +24,18 @@ MundoFinito::MundoFinito(int seed): Mundo(seed) {}
 void MundoFinito::world_edge(Hormiga* hormiga_actual) {
   Posicion posicion;
   Movimiento move;
-  int edge = -1;
+  int edge = es_una_esquina(hormiga_actual->get_posicion_actual());
   posicion = hormiga_actual->get_posicion_actual();
-  edge = es_una_esquina(posicion);
   if (edge == hormiga_actual->get_direccion()) {
     movimiento_esquina((Direcciones)edge, hormiga_actual);
-  } else if (posicion.get_x() == size_.Xmin && move.hacia_arriba(hormiga_actual->get_direccion())) {
-    edge = arriba;
-  } else if (posicion.get_x() == size_.Xmax - 1 && move.hacia_abajo(hormiga_actual->get_direccion())) {
-    edge = abajo;
-  } else if (posicion.get_y() == size_.Ymin && move.hacia_izquierda(hormiga_actual->get_direccion())) {
-    edge = izquierda;
-  } else if (posicion.get_y() == size_.Ymax - 1 && move.hacia_derecha(hormiga_actual->get_direccion())) {
-    edge = derecha;
-  } 
-  if (!(edge % 2)) {
-    movimiento_trivial((Direcciones)edge, hormiga_actual);
+  } else if (posicion.get_x() < size_.Xmin && move.hacia_arriba(hormiga_actual->get_direccion())) {
+    movimiento_trivial(arriba, hormiga_actual);
+  } else if (posicion.get_x() > size_.Xmax - 1 && move.hacia_abajo(hormiga_actual->get_direccion())) {
+    movimiento_trivial(abajo, hormiga_actual);
+  } else if (posicion.get_y() < size_.Ymin && move.hacia_izquierda(hormiga_actual->get_direccion())) {
+    movimiento_trivial(izquierda, hormiga_actual);
+  } else if (posicion.get_y() > size_.Ymax - 1 && move.hacia_derecha(hormiga_actual->get_direccion())) {
+    movimiento_trivial(derecha, hormiga_actual);
   } 
 }
 
