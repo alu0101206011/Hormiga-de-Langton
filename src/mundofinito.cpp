@@ -28,15 +28,15 @@ void MundoFinito::world_edge(Hormiga* hormiga_actual) {
   posicion = hormiga_actual->get_posicion_actual();
   if (edge == hormiga_actual->get_direccion()) {
     movimiento_esquina((Direcciones)edge, hormiga_actual);
-  } else if (posicion.get_x() < size_.Xmin && move.hacia_arriba(hormiga_actual->get_direccion())) {
+  } else if (posicion.get_x() < size_.Xmin) {
     movimiento_trivial(arriba, hormiga_actual);
-  } else if (posicion.get_x() > size_.Xmax - 1 && move.hacia_abajo(hormiga_actual->get_direccion())) {
+  } else if (posicion.get_x() > size_.Xmax - 1) {
     movimiento_trivial(abajo, hormiga_actual);
-  } else if (posicion.get_y() < size_.Ymin && move.hacia_izquierda(hormiga_actual->get_direccion())) {
+  } else if (posicion.get_y() < size_.Ymin) {
     movimiento_trivial(izquierda, hormiga_actual);
-  } else if (posicion.get_y() > size_.Ymax - 1 && move.hacia_derecha(hormiga_actual->get_direccion())) {
+  } else if (posicion.get_y() > size_.Ymax - 1) {
     movimiento_trivial(derecha, hormiga_actual);
-  } 
+  }
 }
 
 
@@ -53,15 +53,15 @@ void MundoFinito::movimiento_esquina(const Direcciones& esquina, Hormiga* hormig
 
 void MundoFinito::movimiento_trivial(const Direcciones& pared, Hormiga* hormiga) {
   switch (pared) {
-  case abajo: 
+  case abajo:
     hormiga->set_posiciones(size_.Xmin, hormiga->get_posicion_siguiente().get_y());
     break;
   case arriba: hormiga->set_posiciones(size_.Xmax - 1, hormiga->get_posicion_siguiente().get_y());
-    break;  
+    break;
   case derecha: hormiga->set_posiciones(hormiga->get_posicion_siguiente().get_x(), size_.Ymin);
-    break; 
+    break;
   case izquierda: hormiga->set_posiciones(hormiga->get_posicion_siguiente().get_x(), size_.Ymax - 1);
-    break; 
+    break;
   default: break;
   }
 }

@@ -27,8 +27,10 @@ class Mundo {
   MatrizCeldas get_tablero(void) const;
   MatrizCeldas& get_tablero(void);
   BoardSize get_size(void) const;
-  Hormiga** get_hormiga(void) const;
   unsigned get_color(const Posicion&) const;
+  Celda& get_celda(const Posicion&) const;
+  Celda& get_celda_hormiga(Hormiga*);
+  Celda& get_next_celda_hormiga(Hormiga*);
 
   void set_tablero(MatrizCeldas const&);
   void set_color(const Posicion&, int);

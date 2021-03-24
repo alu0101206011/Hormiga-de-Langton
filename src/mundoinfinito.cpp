@@ -47,7 +47,6 @@ void MundoInfinito::ampliar_izquierda(int add) {
 
 void MundoInfinito::ampliar_arriba(int add) {
   MatrizCeldas aux(size_.Xmin, size_.Xmax);
-
   for (int i = size_.Xmin, i_tab = size_.Xmin + add; i < size_.Xmax; i++, i_tab++) {
     aux[i].new_size(size_.Ymin, size_.Ymax);
     for (int j = size_.Ymin; j < size_.Ymax; j++) {
@@ -183,13 +182,13 @@ void MundoInfinito::world_edge(Hormiga* hormiga_actual) {
   flag = es_una_esquina(posicion);
   if (flag == hormiga_actual->get_direccion()) {
     change_size_esquinas((Direcciones)flag, ADD_SIZE);
-  } else if (posicion.get_x() < size_.Xmin && move.hacia_arriba(hormiga_actual->get_direccion())) {
+  } else if (posicion.get_x() < size_.Xmin) {
     change_size(arriba, ADD_SIZE);
-  } else if (posicion.get_x() > size_.Xmax - 1 && move.hacia_abajo(hormiga_actual->get_direccion())) {
+  } else if (posicion.get_x() > size_.Xmax - 1) {
     change_size(abajo, ADD_SIZE);
-  } else if (posicion.get_y() < size_.Ymin && move.hacia_izquierda(hormiga_actual->get_direccion())) {
+  } else if (posicion.get_y() < size_.Ymin) {
     change_size(izquierda, ADD_SIZE);
-  } else if (posicion.get_y() > size_.Ymax - 1 && move.hacia_derecha(hormiga_actual->get_direccion())) {
+  } else if (posicion.get_y() > size_.Ymax - 1) {
     change_size(derecha, ADD_SIZE);
   } 
 }

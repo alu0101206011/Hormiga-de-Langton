@@ -1,4 +1,4 @@
-#include <iostream> 
+#include <iostream>
 #include <cassert>
 #include <cstdlib>
 #include <unistd.h>
@@ -9,6 +9,7 @@
 #include "../include/reglas.h"
 #include "../include/hormiga.h"
 #include "../include/vector.h"
+#include "../include/myexception.h"
 #include "../include/mundo.h"
 
 Mundo::Mundo(unsigned m, unsigned n): random_(false) { 
@@ -58,7 +59,7 @@ MatrizCeldas Mundo::get_tablero(void) const {
 }
 
 MatrizCeldas& Mundo::get_tablero(void) {
-  return tablero_;
+    return tablero_;
 }
 
 BoardSize Mundo::get_size(void) const {
@@ -69,9 +70,32 @@ unsigned Mundo::get_color(const Posicion& kPosicion) const {
   return tablero_[kPosicion.get_x()][kPosicion.get_y()].get_color();
 }
 
+Celda& Mundo::get_celda(const Posicion& kPosicion) const {
+  return tablero_[kPosicion.get_x()][kPosicion.get_y()];
+}
+
+Celda& Mundo::get_celda_hormiga(Hormiga* hormiga) {
+  try {
+    return get_celda(hormiga->get_posicion_actual());
+  } catch (const MyException&) {
+    world_edge(hormiga);
+  }
+  return get_celda(hormiga->get_posicion_actual());
+}
+
+Celda& Mundo::get_next_celda_hormiga(Hormiga* hormiga) { 
+  try {
+    return get_celda(hormiga->get_posicion_siguiente());
+  } catch (const MyException&) {
+    world_edge(hormiga);
+  }
+  return get_celda(hormiga->get_posicion_siguiente());
+}
+
 void Mundo::set_tablero(MatrizCeldas const& kNuevoTablero) {
   tablero_ = kNuevoTablero;
 }
+
 void Mundo::set_size(int m, int n) {
   assert(m > 1 && n > 1);
   size_.filas_ = m;
@@ -81,7 +105,6 @@ void Mundo::set_size(int m, int n) {
   size_.Xmax = (m / 2) + (m % 2);
   size_.Ymax = (n / 2) + (n % 2);
 }
-
 
 void Mundo::set_color(const Posicion& kPosicion, int color) {
   tablero_[kPosicion.get_x()][kPosicion.get_y()].set_color(color);
