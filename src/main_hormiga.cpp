@@ -29,6 +29,8 @@
 #include "../include/mundoinfinito.h"
 #include "../include/hormiga_langton.h"
 #include "../include/hormiga_inverso.h"
+#include "../include/hormigac.h"
+#include "../include/hormigad.h"
 #include "../include/universo.h"
 #include "../include/main_functions.h"
 

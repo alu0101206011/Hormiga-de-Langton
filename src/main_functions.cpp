@@ -12,6 +12,8 @@
 #include "../include/mundoinfinito.h"
 #include "../include/hormiga_langton.h"
 #include "../include/hormiga_inverso.h"
+#include "../include/hormigac.h"
+#include "../include/hormigad.h"
 #include "../include/universo.h"
 #include "../include/main_functions.h"
 
@@ -122,20 +124,21 @@ Mundo* crear_mundo(void) {
 
 Hormiga* crear_hormiga(Mundo* mundo, Posicion posicion) {
   char decision = '\0';
-  std::cout << "¿Qué tipo de hormiga desea?\n"
-            << "Hormiga Langton [l]\nHormiga Inversa Langton[i]\n";
+  Hormiga* hormiga;
+  std::cout << "\n¿Qué tipo de hormiga desea?\n"
+            << "Hormiga Langton [l]\nHormiga Inversa Langton[i]\nHormiga C [c]\nHormiga D [d]\n"
+            << "Seleccione: ";
   do {
     std::cin >> decision;
     switch (decision) {
-    case 'l': break;
-    case 'i': break;
+    case 'l': hormiga = new HormigaLangton(*mundo, posicion.get_x(), posicion.get_y()); break;
+    case 'i': hormiga = new HormigaInverso(*mundo, posicion.get_x(), posicion.get_y()); break;
+    case 'c': hormiga = new HormigaC(*mundo, posicion.get_x(), posicion.get_y()); break;
+    case 'd': hormiga = new HormigaD(*mundo, posicion.get_x(), posicion.get_y()); break;
     default: std::cout << "Seleccione 'l' o 'i' para seleccionar tipo de hormiga.\n";
       decision = '\0'; break;
     }
   } while (decision == '\0');
-  Hormiga* hormiga;
-  if (decision == 'l') hormiga = new HormigaLangton(*mundo, posicion.get_x(), posicion.get_y());
-  else hormiga = new HormigaInverso(*mundo, posicion.get_x(), posicion.get_y());
   return hormiga;
 }
 
