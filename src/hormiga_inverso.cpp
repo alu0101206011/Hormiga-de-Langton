@@ -18,9 +18,7 @@ HormigaInverso::HormigaInverso(Mundo& mundo) : Hormiga(mundo) {}
 
 void HormigaInverso::cerebro(void) {
   Regla regla;
-/*   if (regla.regla1(this)) {
-    return;
-  } else */ if (regla.regla4(this)) {
+  if (regla.regla4(this)) {
     return;
   } else if (regla.regla5(this)) {
     return;

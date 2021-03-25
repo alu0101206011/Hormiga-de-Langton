@@ -62,7 +62,7 @@ void Universo::start_simulation(int iter, Velocidad velocidad) {
     }
     ordenar_lista();
     std::cout << *this << "\n";
-  } 
+  }
 }
 
 unsigned Universo::velocidad_simulacion(Velocidad velocidad) {

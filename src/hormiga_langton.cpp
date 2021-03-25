@@ -18,9 +18,7 @@ HormigaLangton::HormigaLangton(Mundo& mundo) : Hormiga(mundo) {}
 
 void HormigaLangton::cerebro(void) {
   Regla regla;
-/*   if (regla.regla1(this)) {
-    return;
-  } else */ if (regla.regla2(this)) {
+  if (regla.regla2(this)) {
     return;
   } else if (regla.regla3(this)) {
     return;
