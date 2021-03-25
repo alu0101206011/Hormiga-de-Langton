@@ -7,4 +7,6 @@ class Regla {
   int regla3(Hormiga* hormiga);
   int regla4(Hormiga* hormiga);
   int regla5(Hormiga* hormiga);
+  int regla6(Hormiga* hormiga);
+  int regla7(Hormiga* hormiga);
 };

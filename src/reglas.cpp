@@ -8,7 +8,7 @@
 #include "../include/vector.h"
 #include "../include/mundo.h"
 
-
+const Movimiento next_move;
 
 int Regla::regla1(Hormiga* hormiga) {  
   if (hormiga->get_color_actual() == hormiga->get_color_siguiente()) {
@@ -24,7 +24,6 @@ int Regla::regla1(Hormiga* hormiga) {
 }
 
 int Regla::regla2(Hormiga* hormiga) {
-  Movimiento next_move;
   if (hormiga->get_color_actual() == Blanco) {
     hormiga->set_direccion(next_move.get_girar_izquierda(hormiga->get_direccion()));
     hormiga->set_color_actual(Negro);
@@ -36,7 +35,6 @@ int Regla::regla2(Hormiga* hormiga) {
 
 
 int Regla::regla3(Hormiga* hormiga) {
-  Movimiento next_move;
   if (hormiga->get_color_actual() == Negro) {
     hormiga->set_direccion(next_move.get_girar_derecha(hormiga->get_direccion()));
     hormiga->set_color_actual(Blanco);
@@ -48,7 +46,6 @@ int Regla::regla3(Hormiga* hormiga) {
 
 
 int Regla::regla4(Hormiga* hormiga) {
-  Movimiento next_move;
   if (hormiga->get_color_actual() == Blanco) {
     hormiga->set_direccion(next_move.get_girar_derecha(hormiga->get_direccion()));
     hormiga->set_color_actual(Negro);
@@ -60,7 +57,6 @@ int Regla::regla4(Hormiga* hormiga) {
 
 
 int Regla::regla5(Hormiga* hormiga) {
-  Movimiento next_move;
   if (hormiga->get_color_actual() == Negro) {
     hormiga->set_direccion(next_move.get_girar_izquierda(hormiga->get_direccion()));
     hormiga->set_color_actual(Blanco);
@@ -68,4 +64,37 @@ int Regla::regla5(Hormiga* hormiga) {
     return 1;
   }
   return 0;
+}
+
+int Regla::regla6(Hormiga* hormiga) {  // Modificación
+  if (hormiga->get_color_actual() == Negro) {
+    hormiga->set_direccion(next_move.get_move_diagonal_derecha(hormiga->get_direccion()));
+    hormiga->set_color_actual(Blanco);
+  } else if (hormiga->get_color_actual() == Blanco) {
+    hormiga->set_direccion(next_move.get_move_diagonal_izquierda(hormiga->get_direccion()));
+    hormiga->set_color_actual(Negro);
+  }
+  hormiga->actualizar_posicion(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
+  return 1;
+}
+
+
+int Regla::regla7(Hormiga* hormiga) {  // Movimiento caballo
+  if (hormiga->get_color_actual() == Negro) {
+    for (unsigned i = 0; i < (unsigned)2; i++) {
+      hormiga->set_color_actual(Blanco);
+      hormiga->actualizar_posicion(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
+    }
+    hormiga->set_direccion(next_move.girar_derecha_puro(hormiga->get_direccion()));
+    hormiga->set_color_actual(Blanco);    
+  } else if (hormiga->get_color_actual() == Blanco) {
+    for (unsigned i = 0; i < (unsigned)2; i++) {
+      hormiga->set_color_actual(Negro);
+      hormiga->actualizar_posicion(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
+    }
+    hormiga->set_direccion(next_move.girar_izquierda_puro(hormiga->get_direccion()));
+    hormiga->set_color_actual(Negro);    
+  }
+  hormiga->actualizar_posicion(*next_move.get_next_pos(hormiga->get_direccion()) + hormiga->get_posicion_actual());
+  return 1;
 }

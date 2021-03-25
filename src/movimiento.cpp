@@ -36,50 +36,97 @@ Posicion** Movimiento::get_direcciones(void) const {
   return direcciones_;
 }
 
-Posicion* Movimiento::get_next_pos(Direcciones direccion) const {
-  return direcciones_[direccion];
+Posicion* Movimiento::get_next_pos(const Direcciones& kDireccion) const {
+  return direcciones_[kDireccion];
 }
 
-Direcciones Movimiento::get_girar_derecha(Direcciones direccion) const {
-  if (direccion == arriba) {
+Direcciones Movimiento::get_girar_derecha(const Direcciones& kDireccion) const {
+  if (kDireccion == arriba) {
     return arriba_izquierda;
   } else {
-    return (Direcciones)(direccion - 1);
+    return (Direcciones)(kDireccion - 1);
   } 
 }
 
-Direcciones Movimiento::get_girar_izquierda(const Direcciones direccion) const {
-  if (direccion == arriba_izquierda) {
+Direcciones Movimiento::get_girar_izquierda(const Direcciones& kDireccion) const {
+  if (kDireccion == arriba_izquierda) {
     return arriba;
   } else {
-    return (Direcciones)(direccion + 1);
+    return (Direcciones)(kDireccion + 1);
   } 
+}
+
+Direcciones Movimiento::girar_derecha_puro(const Direcciones& kDireccion) const {
+  if (kDireccion == arriba_izquierda || kDireccion == izquierda) {
+    return arriba;
+  } else if (!es_diagonal(kDireccion)) {
+    return (Direcciones)(kDireccion + 2);
+  } else {
+    return (Direcciones)(kDireccion + 1);
+  }
+}
+
+Direcciones Movimiento::girar_izquierda_puro(const Direcciones& kDireccion) const {
+  if (kDireccion == arriba) {
+    return izquierda;
+  } else if (!es_diagonal(kDireccion)) {
+    return (Direcciones)(kDireccion - 2);
+  } else {
+    return (Direcciones)(kDireccion - 1);
+  }
+}
+
+Direcciones Movimiento::get_move_diagonal_derecha(const Direcciones& kDireccion) const {
+  if (kDireccion == arriba_izquierda) {
+    return arriba_derecha;
+  } else if (es_diagonal(kDireccion)) {
+    return (Direcciones)(kDireccion + 2);
+  } else {
+    return (Direcciones)(kDireccion + 1);
+  }
+}
+
+Direcciones Movimiento::get_move_diagonal_izquierda(const Direcciones& kDireccion) const {
+  if (kDireccion == arriba_derecha || kDireccion == arriba) {
+    return arriba_izquierda;
+  } else if (es_diagonal(kDireccion)) {
+    return (Direcciones)(kDireccion - 2);
+  } else {
+    return (Direcciones)(kDireccion - 1);
+  }
 }
 
 void Movimiento::set_direccion(Posicion** const& kNewDireccion) {
   direcciones_ = kNewDireccion;
 }
 
-bool Movimiento::hacia_arriba(const Direcciones& direccion) {
-  return (direccion == arriba || 
-          direccion == arriba_izquierda || 
-          direccion == arriba_derecha);
+bool Movimiento::es_diagonal(const Direcciones& kDireccion) const {
+  return (kDireccion == abajo_izquierda || 
+          kDireccion == abajo_derecha ||
+          kDireccion == arriba_izquierda || 
+          kDireccion == arriba_derecha);
 }
 
-bool Movimiento::hacia_derecha(const Direcciones& direccion) {
-  return (direccion == derecha || 
-          direccion == abajo_derecha || 
-          direccion == arriba_derecha);
+bool Movimiento::hacia_arriba(const Direcciones& kDireccion) const {
+  return (kDireccion == arriba || 
+          kDireccion == arriba_izquierda || 
+          kDireccion == arriba_derecha);
 }
 
-bool Movimiento::hacia_abajo(const Direcciones& direccion) {
-  return (direccion == abajo || 
-          direccion == abajo_izquierda || 
-          direccion == abajo_derecha);
+bool Movimiento::hacia_derecha(const Direcciones& kDireccion) const {
+  return (kDireccion == derecha || 
+          kDireccion == abajo_derecha || 
+          kDireccion == arriba_derecha);
 }
 
-bool Movimiento::hacia_izquierda(const Direcciones& direccion) {
-  return (direccion == izquierda || 
-          direccion == abajo_izquierda || 
-          direccion == arriba_izquierda);
+bool Movimiento::hacia_abajo(const Direcciones& kDireccion) const {
+  return (kDireccion == abajo || 
+          kDireccion == abajo_izquierda || 
+          kDireccion == abajo_derecha);
+}
+
+bool Movimiento::hacia_izquierda(const Direcciones& kDireccion) const {
+  return (kDireccion == izquierda || 
+          kDireccion == abajo_izquierda || 
+          kDireccion == arriba_izquierda);
 }
